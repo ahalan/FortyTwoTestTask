@@ -32,8 +32,15 @@ class ViewsTest(TestCase):
 
     def setUp(self):
         self.client = Client()
+        self.user = User.objects.create(**USER_DATA)
+
+    def test_failed_homepage(self):
+        response = self.client.get(reverse('home'))
+
+        self.assertEqual(response.status_code, 404)
 
     def test_homepage(self):
+        Profile.objects.create(**PROFILE_DATA)
         response = self.client.get(reverse('home'))
 
         self.assertEqual(response.status_code, 200)
@@ -46,7 +53,6 @@ class ModelTest(TestCase):
 
     def setUp(self):
         self.user = User.objects.create(**USER_DATA)
-
 
     def test_profile_creation(self):
         Profile.objects.create(**PROFILE_DATA)
