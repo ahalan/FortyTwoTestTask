@@ -8,23 +8,13 @@
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td>HTTP</td>
-        <td>http://127.0.0.1:8000</td>
-        <td>200</td>
-        <td>03.04.2017</td>
-    </tr>
-    <tr>
-        <td>HTTP</td>
-        <td>http://127.0.0.1:8000</td>
-        <td>200</td>
-        <td>03.04.2017</td>
-    </tr>
-    <tr>
-        <td>HTTP</td>
-        <td>http://127.0.0.1:8000</td>
-        <td>200</td>
-        <td>03.04.2017</td>
-    </tr>
+    {% for entry in entries %}
+        <tr>
+            <td>HTTP</td>
+            <td>http://127.0.0.1:8000</td>
+            <td>200</td>
+            <td>03.04.2017</td>
+        </tr>
+    {% endfor %}
     </tbody>
 </table>
