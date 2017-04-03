@@ -8,7 +8,14 @@
                     <a href="#" class="navbar-brand">42 Coffee Cups Test Assignment</a>
                 </div>
                 <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav"></ul>
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="{% url 'profile:home' %}">Home</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'httplog:requests' %}">Requests</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </nav>
