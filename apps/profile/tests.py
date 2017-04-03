@@ -43,17 +43,18 @@ class ViewsTest(TestCase):
 
     def test_failed_homepage(self):
         """ Test homepage view when profile does not exists """
-        response = self.client.get(reverse('home'))
 
+        response = self.client.get(reverse('home'))
         self.assertEqual(response.status_code, 404)
 
     def test_homepage(self):
         """ Test homepage view when profile exists """
+
         Profile.objects.create(**PROFILE_DATA)
         response = self.client.get(reverse('home'))
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'profile/about.html')
+        self.assertTemplateUsed(response, 'about.html')
         self.assertTrue('<!DOCTYPE html>' in response.content)
 
 
@@ -71,5 +72,6 @@ class ModelTest(TestCase):
 
     def test_profile_creation(self):
         """ Test profile instance creation """
+
         Profile.objects.create(**PROFILE_DATA)
         self.assertEquals(Profile.objects.count(), 1)

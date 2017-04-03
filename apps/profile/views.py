@@ -9,7 +9,7 @@ from apps.profile.models import Profile
 class HomeView(View):
     """ Class based view for home page """
 
-    template_name = "profile/about.html"
+    template_name = "about.html"
 
     def get(self, request):
         profile = get_object_or_404(Profile, id=1)
