@@ -3,9 +3,9 @@ from django.contrib import admin
 
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     url(r'^admin/', include(admin.site.urls)),
-
-    url(r'^', include('profile.urls', namespace="profile")),
-    url(r'^requests/', include('httplog.urls', namespace="httplog")),
+    url(r'^', include('apps.profile.urls', namespace="profile")),
+    url(r'^requests/', include('apps.httplog.urls', namespace="httplog")),
 )

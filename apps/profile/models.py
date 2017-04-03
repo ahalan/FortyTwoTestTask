@@ -37,5 +37,9 @@ class Profile(models.Model):
         null=True, blank=True
     )
 
+    class Meta:
+        verbose_name = _("Profile")
+        verbose_name_plural = _("Profiles")
+
     def __unicode__(self):
         return "{0} {1}".format(self.user.first_name, self.user.last_name)

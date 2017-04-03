@@ -8,4 +8,39 @@ class HttpRequestEntry(models.Model):
     """
     Model represents http request history records
     """
-    pass
+
+    host = models.CharField(
+        verbose_name=_("Hostname"),
+        max_length=255
+    )
+    path = models.CharField(
+        verbose_name=_("Path"),
+        max_length=255
+    )
+    method = models.CharField(
+        verbose_name=_("HTTP Method"),
+        max_length=255
+    )
+    user_agent = models.CharField(
+        verbose_name=_("User agent"),
+        max_length=255,
+        blank=True, null=True
+    )
+    time = models.DateTimeField(
+        verbose_name=_("Request time"),
+        auto_now_add=True
+    )
+    status_code = models.IntegerField(
+        verbose_name=_("Status code")
+    )
+
+    class Meta:
+        ordering = ['-time']
+        verbose_name = _("Http Request Entry")
+        verbose_name_plural = _("Http Request Entries")
+
+    def __unicode__(self):
+        return u"{time} | {method} | {host}{path}".format(
+            time=self.time, method=self.method,
+            host=self.host, path=self.path
+        )

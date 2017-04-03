@@ -2,18 +2,22 @@
     <thead>
     <tr>
         <th>Method</th>
-        <th>Url</th>
-        <th>Status Code</th>
+        <th>Status code</th>
+        <th>Host</th>
+        <th>Path</th>
+        <th>User agent</th>
         <th>Date</th>
     </tr>
     </thead>
     <tbody>
     {% for entry in entries %}
         <tr>
-            <td>HTTP</td>
-            <td>http://127.0.0.1:8000</td>
-            <td>200</td>
-            <td>03.04.2017</td>
+            <td>{{ entry.method }}</td>
+            <td>{{ entry.status_code }}</td>
+            <td>{{ entry.host }}</td>
+            <td>{{ entry.path }}</td>
+            <td>{{ entry.user_agent }}</td>
+            <td>{{ entry.time }}</td>
         </tr>
     {% endfor %}
     </tbody>
