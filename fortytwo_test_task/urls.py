@@ -7,5 +7,5 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^', include('profile.urls', namespace="profile")),
-    url(r'^requests/$', include('httplog.urls', namespace="httplog")),
+    url(r'^requests/', include('httplog.urls', namespace="httplog")),
 )

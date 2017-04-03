@@ -19,5 +19,9 @@
     </head>
     <body id="{% block body_id %}{% endblock %}" class="{% block body_class %}{% endblock %}">
         {% block content %}{% endblock content %}
+        {% block scripts %}
+             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        {% endblock %}
+        {% block extrascripts %}{% endblock extrascripts %}
     </body>
 </html>
