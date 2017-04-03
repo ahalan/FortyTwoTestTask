@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
 
-from profile.models import Profile
+from apps.profile.models import Profile
 
 USER_DATA = {
     "id": 1,
