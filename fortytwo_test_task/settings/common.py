@@ -42,7 +42,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'apps.hello',
+    'apps.profile',
+    'south',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -65,7 +66,7 @@ WSGI_APPLICATION = 'fortytwo_test_task.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, '42test.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, '42tt.sqlite3'),
     }
 }
 
@@ -123,6 +124,10 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(BASE_DIR, 'templates'),
+)
+
+FIXTURE_DIRS = (
+    os.path.join(BASE_DIR, 'apps/profile/fixtures/'),
 )
 
 # Turn off south during test
