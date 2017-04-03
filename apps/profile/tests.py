@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.models import User
+from django.core import management
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
@@ -30,6 +31,12 @@ PROFILE_DATA = {
 class ViewsTest(TestCase):
     """ Tests for profile views """
 
+    @classmethod
+    def setUpClass(cls):
+        management.call_command(
+            'flush', interactive=False, load_initial_data=False
+        )
+
     def setUp(self):
         self.client = Client()
         self.user = User.objects.create(**USER_DATA)
@@ -52,6 +59,12 @@ class ViewsTest(TestCase):
 
 class ModelTest(TestCase):
     """ Tests for profile models """
+
+    @classmethod
+    def setUpClass(cls):
+        management.call_command(
+            'flush', interactive=False, load_initial_data=False
+        )
 
     def setUp(self):
         self.user = User.objects.create(**USER_DATA)
