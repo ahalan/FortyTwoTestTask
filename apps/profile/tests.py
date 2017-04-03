@@ -17,7 +17,7 @@ USER_DATA = {
 
 PROFILE_DATA = {
     "user_id": USER_DATA['id'],
-    "birthday": "09-09-1993",
+    "birthday": "1993-09-09",
     "biography": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. \
             Phasellus vel diam quis libero dignissim ullamcorper.",
 
@@ -37,8 +37,8 @@ class ViewsTest(TestCase):
         response = self.client.get(reverse('home'))
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'about.html')
-        self.assertTrue('<!DOCTYPE HTML>' in response.content)
+        self.assertTemplateUsed(response, 'profile/about.html')
+        self.assertTrue('<!DOCTYPE html>' in response.content)
 
 
 class ModelTest(TestCase):

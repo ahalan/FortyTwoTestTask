@@ -1,0 +1,50 @@
+[
+  {
+    "pk": 1,
+    "model": "auth.user",
+    "fields": {
+      "username": "admin",
+      "first_name": "",
+      "last_name": "",
+      "is_active": true,
+      "is_superuser": true,
+      "is_staff": true,
+      "last_login": "2017-04-03T06:29:44.136Z",
+      "groups": [],
+      "user_permissions": [],
+      "password": "pbkdf2_sha256$12000$WGHtNreakKXr$EA/unLDusc1RG4TERnP+CvKr1lWdcTia9yR8g36GhQ8=",
+      "email": "admin@cc.com",
+      "date_joined": "2017-04-03T06:27:33.227Z"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "auth.user",
+    "fields": {
+      "username": "ahalan",
+      "first_name": "Andrey",
+      "last_name": "Halan",
+      "is_active": true,
+      "is_superuser": false,
+      "is_staff": false,
+      "last_login": "2017-04-03T06:32:11Z",
+      "groups": [],
+      "user_permissions": [],
+      "password": "pbkdf2_sha256$12000$U0Q4Wz1IuaSd$TRtxcfdWqAhbTwMLncY1ZJZJKNGblUb1GzLRiTa1g6I=",
+      "email": "halan.andrey@gmail.com",
+      "date_joined": "2017-04-03T06:32:11Z"
+    }
+  },
+  {
+    "pk": 1,
+    "model": "profile.profile",
+    "fields": {
+      "jabber": "halan.andrey@42cc.co",
+      "birthday": "1993-09-09",
+      "user": 2,
+      "skype": "firestarter--",
+      "other_contacts": "Linkedin: https://www.linkedin.com/in/andrey-galan-5b945a71/",
+      "biography": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel diam quis libero dignissim ullamcorper."
+    }
+  }
+]
