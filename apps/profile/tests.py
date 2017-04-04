@@ -54,7 +54,7 @@ class ViewsTest(TestCase):
         response = self.client.get(reverse('profile:home'))
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'about.html')
+        self.assertTemplateUsed(response, 'profile.html')
         self.assertTrue('<!DOCTYPE html>' in response.content)
 
 

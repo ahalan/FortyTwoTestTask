@@ -1,0 +1,143 @@
+{% extends "home.html" %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block main_content %}
+
+    <form enctype="multipart/form-data" method="post"
+          class="form-horizontal profile-edit-form">
+        {% csrf_token %}
+
+        <div class="col-md-6">
+            <div class="form-group {% if form.first_name.errors %} has-error {% endif %}">
+                <label class="col-md-3"
+                       for="{{ form.first_name.html_first_name }}">{{ form.first_name.label }}</label>
+                <div class="col-md-9 section_heading">
+                    {{ form.first_name }}
+                    {% if form.first_name.errors %}
+                        <span class="help-block">{{ form.first_name.errors }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-group {% if form.last_name.errors %} has-error {% endif %}">
+                <label class="col-md-3"
+                       for="{{ form.last_name.html_name }}">{{ form.last_name.label }}</label>
+                <div class="col-md-9 section_heading">
+                    {{ form.last_name }}
+                    {% if form.last_name.errors %}
+                        <span class="help-block">{{ form.last_name.errors }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-group {% if form.birthday.errors %} has-error {% endif %}">
+                <label class="col-md-3"
+                       for="{{ form.birthday.html_name }}">{{ form.birthday.label }}</label>
+                <div class="col-md-9 section_heading">
+                    {{ form.birthday }}
+                    {% if form.name.errors %}
+                        <span class="help-block">{{ form.birthday.errors }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-group {% if form.photo.errors %} has-error {% endif %}">
+                <label class="col-md-3"
+                       for="{{ form.photo.html_name }}">{{ form.photo.label }}</label>
+                <div class="col-md-9 section_heading">
+                    {{ form.photo }}
+                    {% if form.photo.errors %}
+                        <span class="help-block">{{ form.photo.errors }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="thumbnail">
+                    <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTViMzdmMjc3YjMgdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNWIzN2YyNzdiMyI+PHJlY3Qgd2lkdGg9IjI0MiIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI4OS44NTE1NjI1IiB5PSIxMDUuMzYyNSI+MjQyeDIwMDwvdGV4dD48L2c+PC9nPjwvc3ZnPg=="
+                         alt="...">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group {% if form.email.errors %} has-error {% endif %}">
+                <label class="col-md-3"
+                       for="{{ form.email.html_name }}">{{ form.email.label }}</label>
+                <div class="col-md-9 section_heading">
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <span class="help-block">{{ form.email.errors }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-group {% if form.jabber.errors %} has-error {% endif %}">
+                <label class="col-md-3"
+                       for="{{ form.jabber.html_name }}">{{ form.jabber.label }}</label>
+                <div class="col-md-9 section_heading">
+                    {{ form.jabber }}
+                    {% if form.jabber.errors %}
+                        <span class="help-block">{{ form.jabber.errors }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-group {% if form.skype.errors %} has-error {% endif %}">
+                <label class="col-md-3"
+                       for="{{ form.skype.html_name }}">{{ form.skype.label }}</label>
+                <div class="col-md-9 section_heading">
+                    {{ form.skype }}
+                    {% if form.skype.errors %}
+                        <span class="help-block">{{ form.skype.errors }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-group {% if form.other_contacts.errors %} has-error {% endif %}">
+                <label class="col-md-3"
+                       for="{{ form.other_contacts.html_name }}">{{ form.other_contacts.label }}</label>
+                <div class="col-md-12 section_heading">
+                    {{ form.other_contacts }}
+                    {% if form.other_contacts.errors %}
+                        <span class="help-block">{{ form.other_contacts.errors }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-group {% if form.biography.errors %} has-error {% endif %}">
+                <label class="col-md-3"
+                       for="{{ form.biography.html_name }}">{{ form.biography.label }}</label>
+                <div class="col-md-12 section_heading">
+                    {{ form.biography }}
+                    {% if form.biography.errors %}
+                        <span class="help-block">{{ form.biography.errors }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <input type="submit" name="submit" value="Save"
+               class="btn btn-default btn-edit-submit"/>
+        <button type="button" class="btn btn-link">Cancel</button>
+    </form>
+{% endblock %}
+
+{% block extrascripts %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var $form = $('.profile-edit-form');
+            var $submit = $('.btn-edit-submit');
+
+            $form.submit(function (e) {
+                $submit.button('loading');
+                $form.find(":input").prop("disabled", true);
+
+                $.ajax({
+                    type: "POST",
+                    url: '{% url 'profile:edit' %}',
+                    data: $form.serialize(),
+                    success: function (data) {
+                        $form.find(":input").prop("disabled", false);
+                        $submit.button('reset');
+                    }
+                });
+
+                e.preventDefault();
+            });
+        });
+    </script>
+{% endblock extrascripts %}
