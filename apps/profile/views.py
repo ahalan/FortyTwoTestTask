@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 
-1from django.shortcuts import render
+from django.shortcuts import render
 from django.views.generic.base import View
 
 from apps.profile.models import Profile
