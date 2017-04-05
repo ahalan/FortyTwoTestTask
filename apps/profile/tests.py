@@ -1,77 +1,49 @@
 from __future__ import unicode_literals
 
-from django.contrib.auth.models import User
-from django.core import management
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
 
 from apps.profile.models import Profile
 
-USER_DATA = {
-    "id": 1,
-    "first_name": "Andrey",
-    "last_name": "Halan",
-    "email": "halan.andrey@gmail.com",
-    "username": "ahalan"
-}
-
-PROFILE_DATA = {
-    "user_id": USER_DATA['id'],
-    "birthday": "1993-09-09",
-    "biography": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. \
-            Phasellus vel diam quis libero dignissim ullamcorper.",
-
-    "skype": "firestarter--",
-    "jabber": "halan.andrey@42cc.co",
-    "other_contacts": "ETC",
-}
-
 
 class ViewsTest(TestCase):
     """ Tests for profile views """
 
-    @classmethod
-    def setUpClass(cls):
-        management.call_command(
-            'flush', interactive=False, load_initial_data=False
-        )
-
     def setUp(self):
         self.client = Client()
-        self.user = User.objects.create(**USER_DATA)
-
-    def test_failed_homepage(self):
-        """ Test homepage view when profile does not exists """
-
-        response = self.client.get(reverse('profile:home'))
-        self.assertEqual(response.status_code, 404)
 
     def test_homepage(self):
         """ Test homepage view when profile exists """
 
-        Profile.objects.create(**PROFILE_DATA)
-        response = self.client.get(reverse('profile:home'))
+        profile = Profile.objects.first()
+        response = self.client.get(reverse('home'))
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'about.html')
         self.assertTrue('<!DOCTYPE html>' in response.content)
+        self.assertTrue('profile' in response.context.keys())
+        self.assertEqual(profile, response.context['profile'])
+
+        self.assertIn(profile.first_name, response.content)
+        self.assertIn(profile.last_name, response.content)
+        self.assertIn(profile.email, response.content)
+        self.assertIn(profile.jabber, response.content)
+        self.assertIn(profile.skype, response.content)
+        self.assertIn(profile.biography, response.content)
+        self.assertIn(profile.other_contacts, response.content)
 
 
 class ModelTest(TestCase):
     """ Tests for profile models """
 
-    @classmethod
-    def setUpClass(cls):
-        management.call_command(
-            'flush', interactive=False, load_initial_data=False
-        )
-
-    def setUp(self):
-        self.user = User.objects.create(**USER_DATA)
-
     def test_profile_creation(self):
         """ Test profile instance creation """
-
-        Profile.objects.create(**PROFILE_DATA)
-        self.assertEquals(Profile.objects.count(), 1)
+        count_before = Profile.objects.count()
+        Profile.objects.create(**{
+            "first_name": "Andrey",
+            "last_name": "Halan",
+            "email": "halan.andrey@gmail.com",
+            "username": "newuser"
+        })
+        self.assertEquals(Profile.objects.count(), count_before + 1)

@@ -5,16 +5,11 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
 
-class Profile(models.Model):
+class Profile(User):
     """
     Model represents user's profile
     """
 
-    user = models.ForeignKey(
-        User,
-        related_name="profile",
-        on_delete=models.CASCADE
-    )
     birthday = models.DateField(
         verbose_name=_("Date of birth"),
         blank=True, null=True
@@ -38,8 +33,9 @@ class Profile(models.Model):
     )
 
     class Meta:
+        ordering = ['-id']
         verbose_name = _("Profile")
         verbose_name_plural = _("Profiles")
 
     def __unicode__(self):
-        return "{0} {1}".format(self.user.first_name, self.user.last_name)
+        return "{0} {1}".format(self.first_name, self.last_name)
