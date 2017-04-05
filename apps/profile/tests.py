@@ -17,7 +17,7 @@ class ViewsTest(TestCase):
         """ Test homepage view when profile exists """
 
         profile = Profile.objects.first()
-        response = self.client.get(reverse('home'))
+        response = self.client.get(reverse('profile:home'))
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'about.html')
