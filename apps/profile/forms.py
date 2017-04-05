@@ -1,20 +1,30 @@
 from __future__ import unicode_literals
 
 from django import forms
-from django.utils.translation import ugettext_lazy as _
+from django.forms.widgets import TextInput, Textarea
+
+from apps.profile.models import Profile
+from apps.profile.widgets import CalendarWidget
 
 
-class ProfileEditForm(forms.Form):
+class ProfileEditForm(forms.ModelForm):
     """
     Edit profile form
     """
 
-    first_name = forms.CharField(label='Name', max_length=50)
-    last_name = forms.CharField(label='Last name', max_length=50)
-    birthday = forms.DateField(label='Date of birth')
-    photo = forms.ImageField(required=False)
-    biography = forms.CharField(label='Bio', widget=forms.Textarea, max_length=10000)
-    email = forms.EmailField(label='Email')
-    jabber = forms.EmailField(label='Jabber')
-    skype = forms.CharField(label='Skype', max_length=50)
-    other_contacts = forms.CharField(label='Other contacts',widget=forms.Textarea, max_length=10000)
+    class Meta:
+        model = Profile
+        fields = (
+            'first_name', 'last_name', 'birthday','biography',
+            'email', 'jabber', 'skype', 'other_contacts', 'photo'
+        )
+        widgets = {
+            'first_name': TextInput(attrs={'class': 'form-control'}),
+            'last_name': TextInput(attrs={'class': 'form-control'}),
+            'birthday': CalendarWidget(),
+            'biography': Textarea(attrs={'class': 'form-control'}),
+            'email': TextInput(attrs={'class': 'form-control'}),
+            'jabber': TextInput(attrs={'class': 'form-control'}),
+            'skype': TextInput(attrs={'class': 'form-control'}),
+            'other_contacts': Textarea(attrs={'class': 'form-control'}),
+        }
