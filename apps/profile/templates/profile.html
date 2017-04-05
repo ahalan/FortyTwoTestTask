@@ -5,10 +5,10 @@
         <div class="col-md-12"><h4>Name</h4></div>
 
         <div class="col-md-6">First Name:</div>
-        <div class="col-md-6">{{ profile.user.first_name }}</div>
+        <div class="col-md-6">{{ profile.first_name }}</div>
 
         <div class="col-md-6">Last name:</div>
-        <div class="col-md-6">{{ profile.user.last_name }}</div>
+        <div class="col-md-6">{{ profile.last_name }}</div>
 
         <div class="col-md-6">Date of birth:</div>
         <div class="col-md-6">{{ profile.birthday|date:'m-d-Y' }}</div>
@@ -21,7 +21,7 @@
         <div class="col-md-12"><h4>Contacts</h4></div>
 
         <div class="col-md-6">Email:</div>
-        <div class="col-md-6">{{ profile.user.email }}</div>
+        <div class="col-md-6">{{ profile.email }}</div>
 
         <div class="col-md-6">Jabber:</div>
         <div class="col-md-6">{{ profile.jabber }}</div>
