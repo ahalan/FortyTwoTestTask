@@ -41,6 +41,7 @@ class Profile(User):
     )
 
     class Meta:
+        ordering = ['-id']
         verbose_name = _("Profile")
         verbose_name_plural = _("Profiles")
 

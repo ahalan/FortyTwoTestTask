@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 
-from django.core import management
 from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
@@ -11,28 +10,8 @@ from apps.profile.models import Profile
 from apps.profile.forms import ProfileEditForm
 
 
-PROFILE_DATA = {
-    "first_name": "Andrey",
-    "last_name": "Halan",
-    "email": "halan.andrey@gmail.com",
-    "username": "ahalan",
-    "birthday": "1993-09-09",
-    "biography": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. \
-            Phasellus vel diam quis libero dignissim ullamcorper.",
-    "skype": "firestarter--",
-    "jabber": "halan.andrey@42cc.co",
-    "other_contacts": "ETC",
-}
-
-
 class ViewsTest(TestCase):
     """ Tests for profile views """
-
-    @classmethod
-    def setUpClass(cls):
-        management.call_command(
-            'flush', interactive=False, load_initial_data=False
-        )
 
     def setUp(self):
         self.client = Client()
@@ -40,12 +19,22 @@ class ViewsTest(TestCase):
     def test_home_page(self):
         """ Test homepage view when profile exists """
 
-        Profile.objects.create(**PROFILE_DATA)
+        profile = Profile.objects.first()
         response = self.client.get(reverse('profile:home'))
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'profile.html')
         self.assertTrue('<!DOCTYPE html>' in response.content)
+        self.assertTrue('profile' in response.context.keys())
+        self.assertEqual(profile, response.context['profile'])
+
+        self.assertIn(profile.first_name, response.content)
+        self.assertIn(profile.last_name, response.content)
+        self.assertIn(profile.email, response.content)
+        self.assertIn(profile.jabber, response.content)
+        self.assertIn(profile.skype, response.content)
+        self.assertIn(profile.biography, response.content)
+        self.assertIn(profile.other_contacts, response.content)
 
     def test_get_edit_page(self):
         """ Test profile edit view on get request """
@@ -67,21 +56,19 @@ class ViewsTest(TestCase):
         self.assertTemplateUsed(response, 'edit.html')
         self.assertTrue('<!DOCTYPE html>' in response.content)
 
-
 class ModelTest(TestCase):
     """ Tests for profile models """
 
-    @classmethod
-    def setUpClass(cls):
-        management.call_command(
-            'flush', interactive=False, load_initial_data=False
-        )
-
     def test_profile_creation(self):
         """ Test profile instance creation """
-
-        Profile.objects.create(**PROFILE_DATA)
-        self.assertEquals(Profile.objects.count(), 1)
+        count_before = Profile.objects.count()
+        Profile.objects.create(**{
+            "first_name": "Andrey",
+            "last_name": "Halan",
+            "email": "halan.andrey@gmail.com",
+            "username": "newuser"
+        })
+        self.assertEquals(Profile.objects.count(), count_before + 1)
 
     def test_image_resize(self):
         """ Tests if submited image gets resized """
