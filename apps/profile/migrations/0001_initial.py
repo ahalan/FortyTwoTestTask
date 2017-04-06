@@ -2,8 +2,6 @@
 from south.utils import datetime_utils as datetime
 from south.db import db
 from south.v2 import SchemaMigration
-from django.db import models
-from django.core.management import call_command
 
 
 class Migration(SchemaMigration):
@@ -19,8 +17,6 @@ class Migration(SchemaMigration):
             ('other_contacts', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
         ))
         db.send_create_signal(u'profile', ['Profile'])
-
-        call_command("loaddata", "initial_data.json")
 
     def backwards(self, orm):
         # Deleting model 'Profile'
