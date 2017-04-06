@@ -12,12 +12,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            var url = "{% url 'httplog:requests-history' %}";
-
-            getRequestHistory(url);
-            setTimeout(function (url) {
-                getRequestHistory(url)
-            }, 10000);
+            requests.init("{% url 'httplog:requests-history' %}");
         });
     </script>
 {% endblock extrascripts %}

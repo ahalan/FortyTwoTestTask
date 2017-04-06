@@ -9,17 +9,26 @@
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li>
-                            <a href="{% url 'profile:home' %}">Home</a>
+                        <li><a href="{% url 'profile:home' %}">Home</a></li>
+                        <li><a href="{% url 'httplog:requests' %}">Requests</a>
                         </li>
-                        <li>
-                            <a href="{% url 'httplog:requests' %}">Requests</a>
-                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                       {% if user.is_authenticated %}
+                            <li><a href="#">{{ user.username }}</a></li>
+                            <li><a href="{% url 'profile:logout' %}">Logout</a></li>
+                       {% else %}
+                            <li><a href="{% url 'profile:login' %}">Login</a></li>
+                       {% endif %}
                     </ul>
                 </div>
             </div>
         </nav>
     {% endblock header %}
 
-    {% block main_content %}{% endblock %}
+    <div class="container">
+        <div class="row">
+            {% block main_content %}{% endblock %}
+        </div>
+    </div>
 {% endblock %}
