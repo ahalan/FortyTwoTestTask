@@ -21,10 +21,10 @@ class ProfileEditForm(forms.ModelForm):
         widgets = {
             'first_name': TextInput(attrs={'class': 'form-control'}),
             'last_name': TextInput(attrs={'class': 'form-control'}),
-            'birthday': CalendarWidget(),
-            'biography': Textarea(attrs={'class': 'form-control'}),
             'email': TextInput(attrs={'class': 'form-control'}),
             'jabber': TextInput(attrs={'class': 'form-control'}),
             'skype': TextInput(attrs={'class': 'form-control'}),
+            'biography': Textarea(attrs={'class': 'form-control'}),
             'other_contacts': Textarea(attrs={'class': 'form-control'}),
+            'birthday': CalendarWidget(),
         }

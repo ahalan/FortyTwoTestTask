@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+import json
+
 from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
@@ -39,28 +41,79 @@ class ViewsTest(TestCase):
     def test_get_edit_page(self):
         """ Test profile edit view on get request """
 
-        Profile.objects.create(**PROFILE_DATA)
         response = self.client.get(reverse('profile:edit'))
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'edit.html')
         self.assertTrue('<!DOCTYPE html>' in response.content)
+        self.assertTrue('form' in response.context.keys())
+        self.assertEqual(response.context['form'].__class__, ProfileEditForm)
 
-    def test_post_edit_page(self):
-        """ Test profile edit view on post request """
+    def test_post_edit_page_valid(self):
+        """ Test profile edit view on post request with valid data """
 
-        Profile.objects.create(**PROFILE_DATA)
-        response = self.client.get(reverse('profile:edit'))
+        data = {
+            'first_name': 'test',
+            'last_name': 'test',
+            'biography': '',
+            'email': 'test@test.com',
+            'skype': 'test',
+            'jabber': 'test@test.co',
+            'other_contacts': '',
+            'birthday': '2000-01-01'
+        }
+        response = self.client.post(reverse('profile:edit'), data)
+        content = json.loads(response.content)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'edit.html')
-        self.assertTrue('<!DOCTYPE html>' in response.content)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        self.assertEqual(content, {"payload": {}, "success": True})
+
+    def test_post_edit_page_invalid(self):
+        """ Test profile edit view on post request with invalid data"""
+
+        data = {
+            'first_name': 'test',
+            'last_name': 'test',
+            'biography': '',
+            'email': 'INVALID',
+            'skype': 'test',
+            'jabber': 'INVALID',
+            'other_contacts': '',
+            'birthday': 'INVALID'
+        }
+        response = self.client.post(reverse('profile:edit'), data)
+        content = json.loads(response.content)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'application/json')
+
+        self.assertFalse(content['success'])
+        self.assertIn('errors', content['payload'])
+
+        self.assertIn('birthday', content['payload']['errors'])
+        self.assertEqual(
+            content['payload']['errors']['birthday'],
+            [u'Enter a valid date.']
+        )
+        self.assertIn('jabber', content['payload']['errors'])
+        self.assertEqual(
+            content['payload']['errors']['jabber'],
+            [u'Enter a valid email address.']
+        )
+        self.assertIn('email', content['payload']['errors'])
+        self.assertEqual(
+            content['payload']['errors']['email'],
+            [u'Enter a valid email address.']
+        )
+
 
 class ModelTest(TestCase):
     """ Tests for profile models """
 
     def test_profile_creation(self):
         """ Test profile instance creation """
+
         count_before = Profile.objects.count()
         Profile.objects.create(**{
             "first_name": "Andrey",
@@ -73,7 +126,7 @@ class ModelTest(TestCase):
     def test_image_resize(self):
         """ Tests if submited image gets resized """
 
-        profile = Profile.objects.create(**PROFILE_DATA)
+        profile = Profile.objects.first()
         profile.photo = SimpleUploadedFile(
             name='test_image.jpg',
             content=open('assets/img/empty.jpg', 'rb').read(),
@@ -87,22 +140,31 @@ class ModelTest(TestCase):
 class FormsTest(TestCase):
     """ Tests for profile form """
 
-    @classmethod
-    def setUpClass(cls):
-        management.call_command(
-            'flush', interactive=False, load_initial_data=False
-        )
-
     def setUp(self):
-        self.profile = Profile.objects.create(**PROFILE_DATA)
+        self.client = Client()
+        self.profile = Profile.objects.first()
 
-    def test_edit_event(self):
-        data = PROFILE_DATA
-        data['first_name'] = 'test'
-        data['biography'] = 'biography test'
-        data['skype'] = 'skype test'
-        data['jabber'] = 'jabber@test.com'
+    def test_edit_event_valid(self):
+        """ Test profile form with valid data """
 
+        data = {
+            'first_name': 'test',
+            'biography': 'biography test',
+        }
         form = ProfileEditForm(data, instance=self.profile)
-        form.is_valid()
+
         self.assertTrue(form.is_valid())
+
+    def test_edit_event_invalid(self):
+        """ Tests profile form with invalid data """
+
+        data = {
+            'jabber': 'INVALID'
+        }
+        form = ProfileEditForm(data, instance=self.profile)
+
+        self.assertFalse(form.is_valid())
+        self.assertIn('jabber', form.errors)
+        self.assertEqual(
+            form.errors['jabber'], [u'Enter a valid email address.']
+        )

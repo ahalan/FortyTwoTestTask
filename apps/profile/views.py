@@ -39,7 +39,8 @@ class ProfileEditView(View):
         )
         if form.is_valid():
             profile = form.save()
-            response_data['payload']['photo_url'] = profile.photo.url
+            if profile.photo:
+                response_data['payload']['photo_url'] = profile.photo.url
         else:
             response_data['success'] = False
             response_data['payload']['errors'] = dict(form.errors.items())
