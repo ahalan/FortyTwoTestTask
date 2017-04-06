@@ -34,7 +34,7 @@ var requests = {
 
             setTimeout(function () {
                 self.getRequestHistory(self);
-            }, 1000);
+            }, 500);
         });
     }
 }
