@@ -1,26 +1,23 @@
 {% extends "home.html" %}
+{% load staticfiles %}
 
 {% block title %}Requests{% endblock title %}
 
 {% block main_content %}
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 request-history"></div>
-        </div>
-    </div>
+     <div class="col-md-12 request-history"></div>
 {% endblock %}
 
 {% block extrascripts %}
-    <script type="text/javascript">
-        function getRequestHistory() {
-            $.get("{% url 'httplog:requests-history' %}", function (data) {
-                $(".request-history").html(data);
-            });
-        };
+    <script src="{% static 'js/requests.js' %}"></script>
 
+    <script type="text/javascript">
         $(document).ready(function () {
-            getRequestHistory();
-            getRequestHistoryInterval = setInterval(getRequestHistory, 5000);
+            var url = "{% url 'httplog:requests-history' %}";
+
+            getRequestHistory(url);
+            setTimeout(function (url) {
+                getRequestHistory(url)
+            }, 10000);
         });
     </script>
 {% endblock extrascripts %}
