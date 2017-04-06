@@ -15,7 +15,7 @@ class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = (
-            'first_name', 'last_name', 'birthday','biography',
+            'first_name', 'last_name', 'birthday', 'biography',
             'email', 'jabber', 'skype', 'other_contacts', 'photo'
         )
         widgets = {
