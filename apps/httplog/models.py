@@ -33,7 +33,10 @@ class HttpRequestEntry(models.Model):
     status_code = models.IntegerField(
         verbose_name=_("Status code")
     )
-
+    viewed = models.BooleanField(
+        verbose_name=_("Viewed"),
+        default=False
+    )
     class Meta:
         ordering = ['-time']
         verbose_name = _("Http Request Entry")

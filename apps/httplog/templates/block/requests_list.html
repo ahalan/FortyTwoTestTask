@@ -11,7 +11,7 @@
     </thead>
     <tbody>
     {% for entry in entries %}
-        <tr class="{% if entry.non_viewed %}success{% endif %}">
+        <tr class="{% if not entry.viewed %}success{% endif %}">
             <td>{{ entry.method }}</td>
             <td>{{ entry.status_code }}</td>
             <td>{{ entry.host }}</td>

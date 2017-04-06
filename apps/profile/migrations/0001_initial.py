@@ -20,8 +20,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'profile', ['Profile'])
 
-        call_command("loaddata", "initial_data.json")
-
     def backwards(self, orm):
         # Deleting model 'Profile'
         db.delete_table(u'profile_profile')
