@@ -8,6 +8,12 @@ from django.conf import settings
 from apps.httplog.models import HttpRequestEntry
 
 
+class RequestsHistoryPageView(TemplateView):
+    """ Class based view for home page """
+
+    template_name = "requests.html"
+
+
 class RequestsHistoryView(View):
     """ Class based view for home page """
 
@@ -15,15 +21,15 @@ class RequestsHistoryView(View):
 
     def get(self, request):
         if request.is_ajax():
+            viewed = request.GET.get('viewed', False);
             entries = HttpRequestEntry.objects.all()
-            context = {
-                'entries': entries[:settings.HTTP_LOG_ENTRIES_ON_PAGE]
-            }
-            return render(request, self.template_name, context)
+            new_entries_count = entries.filter(viewed=False).count()
+
+            if viewed:
+                entries.update(viewed=True)
+
+            return render(request, self.template_name, {
+                'entries': entries[:settings.HTTP_LOG_ENTRIES_ON_PAGE],
+                'non_viewed_count': new_entries_count
+            })
         return HttpResponseBadRequest()
-
-
-class RequestsHistoryPageView(TemplateView):
-    """ Class based view for home page """
-
-    template_name = "requests.html"
