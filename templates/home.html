@@ -10,17 +10,18 @@
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
                         <li><a href="{% url 'profile:home' %}">Home</a></li>
-                        <li><a href="{% url 'profile:edit' %}">Edit</a></li>
+                        <li><a href="{% url 'profile:edit' %}">Edit profile</a></li>
                         <li><a href="{% url 'httplog:requests' %}">Requests</a>
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                       {% if user.is_authenticated %}
-                            <li><a href="#">{{ user.username }}</a></li>
-                            <li><a href="{% url 'profile:logout' %}">Logout</a></li>
-                       {% else %}
-                            <li><a href="{% url 'profile:login' %}">Login</a></li>
-                       {% endif %}
+                        {% block navbar_right_elements %}
+                            {% if user.is_authenticated %}
+                                <li><a href="{% url 'profile:logout' %}">Logout</a></li>
+                            {% else %}
+                                <li><a href="{% url 'profile:login' %}">Login</a></li>
+                            {% endif %}
+                        {% endblock %}
                     </ul>
                 </div>
             </div>
