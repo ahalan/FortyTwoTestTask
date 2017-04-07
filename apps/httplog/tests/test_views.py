@@ -62,34 +62,3 @@ class ViewsTest(TestCase):
             len(response.context['entries']),
             settings.HTTP_LOG_ENTRIES_ON_PAGE
         )
-
-
-class ModelTest(TestCase):
-    """ Tests for httplog models """
-
-    def test_httplog_entry_creation(self):
-        """ Test httplog instance creation """
-
-        HttpRequestEntry.objects.create(
-            method='GET',
-            host='localhost',
-            path='/',
-            status_code=200
-        )
-        self.assertEquals(HttpRequestEntry.objects.count(), 1)
-
-
-class MiddlewareTest(TestCase):
-    def setUp(self):
-        self.client = Client()
-        self.path = reverse('httplog:requests')
-
-    def test_httprequest_logger(self):
-        """ Test http request middleware """
-
-        self.client.get(self.path)
-        entry = HttpRequestEntry.objects.get(path=self.path)
-
-        self.assertEqual(HttpRequestEntry.objects.count(), 1)
-        self.assertEquals(entry.method, 'GET')
-        self.assertEquals(entry.path, self.path)
