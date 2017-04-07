@@ -1,28 +1,18 @@
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from south.utils import datetime_utils as datetime
 from south.db import db
-from south.v2 import SchemaMigration
+from south.v2 import DataMigration
 from django.db import models
+from django.core.management import call_command
 
 
-class Migration(SchemaMigration):
+class Migration(DataMigration):
 
     def forwards(self, orm):
-        # Adding model 'Profile'
-        db.create_table(u'profile_profile', (
-            (u'user_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True, primary_key=True)),
-            ('birthday', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
-            ('biography', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('jabber', self.gf('django.db.models.fields.EmailField')(max_length=75, null=True, blank=True)),
-            ('skype', self.gf('django.db.models.fields.CharField')(max_length=23, null=True, blank=True)),
-            ('other_contacts', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-        ))
-        db.send_create_signal(u'profile', ['Profile'])
+        call_command("loaddata", "initial_data.json")
 
     def backwards(self, orm):
-        # Deleting model 'Profile'
-        db.delete_table(u'profile_profile')
-
+        "Write your backwards methods here."
 
     models = {
         u'auth.group': {
@@ -62,14 +52,16 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         u'profile.profile': {
-            'Meta': {'object_name': 'Profile', '_ormbases': [u'auth.User']},
+            'Meta': {'ordering': "[u'-id']", 'object_name': 'Profile', '_ormbases': [u'auth.User']},
             'biography': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'birthday': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             'jabber': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
             'other_contacts': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'photo': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'skype': ('django.db.models.fields.CharField', [], {'max_length': '23', 'null': 'True', 'blank': 'True'}),
             u'user_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['auth.User']", 'unique': 'True', 'primary_key': 'True'})
         }
     }
 
     complete_apps = ['profile']
+    symmetrical = True
