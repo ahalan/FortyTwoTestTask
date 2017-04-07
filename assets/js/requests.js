@@ -4,27 +4,31 @@ var requests = {
 
     init: function (url) {
         var self = this;
-        self.url = url;
+        self.history_url = url;
         self.title = 'Requests';
-        self.getRequestHistory(self);
+        self.timeout = 3000;
+        self.focused_on_init = !document.hidden;
 
-        window.onfocus = function () {
-            self.focused = true;
-        };
-        window.onblur = function () {
-            self.focused = false;
-        };
+        self.getRequestHistory(self);
     },
 
     getRequestHistory: function (self) {
-        var url = self.url;
-        if (self.focused) {
-            url = self.url + "?viewed=true";
+        var url = self.history_url;
+        var timeout = self.timeout;
+
+        // check if user viewed requests on tab
+        if (!document.hidden && !self.focused_on_init) {
+            url = self.history_url + "?viewed=true";
+            timeout = self.timeout;
+        } else if (document.hidden) {
+            timeout = self.timeout / 6;
         }
 
         $.get(url, function (data) {
+            self.focused_on_init = false;
             self.requestsBlock.html(data);
-            // Update page title with
+
+            // Update page title with (n) new requests
             var counter = $(self.nonViewedCountId).val();
             if (counter != 0) {
                 document.title = self.title + " (" + counter + ")";
@@ -34,7 +38,7 @@ var requests = {
 
             setTimeout(function () {
                 self.getRequestHistory(self);
-            }, 500);
+            }, timeout);
         });
     }
 }
