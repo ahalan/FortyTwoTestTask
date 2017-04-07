@@ -3,14 +3,12 @@ from __future__ import unicode_literals
 import json
 
 from django.core.urlresolvers import reverse
-from django.core.files.uploadedfile import SimpleUploadedFile
-from django.conf import settings
 from django.test import TestCase
 from django.test.client import Client
 from django.template import Context, Template
 
-from apps.profile.models import Profile
 from apps.profile.forms import ProfileEditForm
+from apps.profile.models import Profile
 
 
 class ViewsTest(TestCase):
