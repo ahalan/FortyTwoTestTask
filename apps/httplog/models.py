@@ -37,6 +37,7 @@ class HttpRequestEntry(models.Model):
         verbose_name=_("Viewed"),
         default=False
     )
+
     class Meta:
         ordering = ['-time']
         verbose_name = _("Http Request Entry")

@@ -21,7 +21,7 @@ class RequestsHistoryView(View):
 
     def get(self, request):
         if request.is_ajax():
-            viewed = request.GET.get('viewed', False);
+            viewed = request.GET.get('viewed', False)
             entries = HttpRequestEntry.objects.all()
             new_entries_count = entries.filter(viewed=False).count()
 
