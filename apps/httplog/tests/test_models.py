@@ -18,4 +18,3 @@ class ModelTest(TestCase):
             status_code=200
         )
         self.assertEquals(HttpRequestEntry.objects.count(), 1)
-

@@ -3,13 +3,11 @@ from __future__ import unicode_literals
 import json
 
 from django.core.urlresolvers import reverse
-from django.core.files.uploadedfile import SimpleUploadedFile
-from django.conf import settings
 from django.test import TestCase
 from django.test.client import Client
 
-from apps.profile.models import Profile
 from apps.profile.forms import ProfileEditForm
+from apps.profile.models import Profile
 
 
 class ViewsTest(TestCase):
@@ -105,66 +103,4 @@ class ViewsTest(TestCase):
         self.assertEqual(
             content['payload']['errors']['email'],
             [u'Enter a valid email address.']
-        )
-
-
-class ModelTest(TestCase):
-    """ Tests for profile models """
-
-    def test_profile_creation(self):
-        """ Test profile instance creation """
-
-        count_before = Profile.objects.count()
-        Profile.objects.create(**{
-            "first_name": "Andrey",
-            "last_name": "Halan",
-            "email": "halan.andrey@gmail.com",
-            "username": "newuser"
-        })
-        self.assertEquals(Profile.objects.count(), count_before + 1)
-
-    def test_image_resize(self):
-        """ Tests if submited image gets resized """
-
-        profile = Profile.objects.first()
-        profile.photo = SimpleUploadedFile(
-            name='test_image.jpg',
-            content=open('assets/img/empty.jpg', 'rb').read(),
-            content_type='image/jpeg')
-        profile.save()
-
-        self.assertEqual(settings.PHOTO_DIMENSIONS_HIGHT, profile.photo.height)
-        self.assertEqual(settings.PHOTO_DIMENSIONS_WIDTH, profile.photo.width)
-
-
-class FormsTest(TestCase):
-    """ Tests for profile form """
-
-    def setUp(self):
-        self.client = Client()
-        self.profile = Profile.objects.first()
-
-    def test_edit_event_valid(self):
-        """ Test profile form with valid data """
-
-        data = {
-            'first_name': 'test',
-            'biography': 'biography test',
-        }
-        form = ProfileEditForm(data, instance=self.profile)
-
-        self.assertTrue(form.is_valid())
-
-    def test_edit_event_invalid(self):
-        """ Tests profile form with invalid data """
-
-        data = {
-            'jabber': 'INVALID'
-        }
-        form = ProfileEditForm(data, instance=self.profile)
-
-        self.assertFalse(form.is_valid())
-        self.assertIn('jabber', form.errors)
-        self.assertEqual(
-            form.errors['jabber'], [u'Enter a valid email address.']
         )
