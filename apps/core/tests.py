@@ -22,4 +22,3 @@ class CommandTest(TestCase):
             self.assertIn('error:', out.getvalue())
         finally:
             sys.stderr = saved_stderr
-
