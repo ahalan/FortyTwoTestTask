@@ -4,28 +4,36 @@ var requests = {
 
     init: function (url) {
         var self = this;
-        self.history_url = url;
-        self.title = 'Requests';
-        self.timeout = 3000;
-        self.focused_on_init = !document.hidden;
 
+        self.history_url = url;
+        self.is_first_init = true;
+        self.title = 'Requests';
+
+        self.isFocused(self);
         self.getRequestHistory(self);
+
+        setInterval(function () {
+            self.isFocused(self);
+        }, 500);
+    },
+
+    isFocused: function (self) {
+        self.timeout = 1000;
+        self.url = self.history_url;
+
+        if (self.is_first_init) {
+            self.is_first_init = false;
+        } else {
+            if (!document.hidden) {
+                self.url = self.history_url + "?viewed=true";
+            } else {
+                self.timeout = 800;
+            }
+        }
     },
 
     getRequestHistory: function (self) {
-        var url = self.history_url;
-        var timeout = self.timeout;
-
-        // check if user viewed requests on tab
-        if (!document.hidden && !self.focused_on_init) {
-            url = self.history_url + "?viewed=true";
-            timeout = self.timeout;
-        } else if (document.hidden) {
-            timeout = self.timeout / 6;
-        }
-
-        $.get(url, function (data) {
-            self.focused_on_init = false;
+        $.get(self.url, function (data) {
             self.requestsBlock.html(data);
 
             // Update page title with (n) new requests
@@ -38,7 +46,7 @@ var requests = {
 
             setTimeout(function () {
                 self.getRequestHistory(self);
-            }, timeout);
+            }, self.timeout);
         });
     }
 }
