@@ -23,13 +23,13 @@ class RequestsHistoryView(View):
         if request.is_ajax():
             viewed = request.GET.get('viewed', False)
             entries = HttpRequestEntry.objects.all()
-            new_entries_count = entries.filter(viewed=False).count()
+            new_entries = entries.filter(viewed=False)
 
             if viewed:
-                entries.update(viewed=True)
+                new_entries.update(viewed=True)
 
             return render(request, self.template_name, {
                 'entries': entries[:settings.HTTP_LOG_ENTRIES_ON_PAGE],
-                'non_viewed_count': new_entries_count
+                'non_viewed_count': new_entries.count()
             })
         return HttpResponseBadRequest()
