@@ -67,8 +67,10 @@ class ViewsTest(TestCase):
 
         self.assertEqual(
             len(response.context['entries']),
-            settings.HTTP_LOG_ENTRIES_ON_PAGE)
+            settings.HTTP_LOG_ENTRIES_ON_PAGE
+        )
         self.assertEqual(
             list(response.context['entries']),
-            list(last_ten_entries))
+            list(last_ten_entries)
+        )
 
