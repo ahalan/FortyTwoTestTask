@@ -143,4 +143,10 @@ PHOTO_DIMENSIONS_WIDTH = 200
 PHOTO_DIMENSIONS_HIGHT = 200
 
 # Core settings
-EXCLUDE_FROM_MODELS_LOG = ['CrudModelEntry', 'ContentType', 'MigrationHistory']
+EXCLUDE_FROM_MODELS_LOG = [
+    'CrudModelEntry',
+    'ContentType',
+    'MigrationHistory',
+    'Session',
+    'LogEntry'
+]
