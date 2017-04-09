@@ -53,12 +53,23 @@ class ViewsTest(TestCase):
                 status_code=200
             ) for i in range(20)
         ])
+        last_ten_entries = HttpRequestEntry.objects.all()[
+                  :settings.HTTP_LOG_ENTRIES_ON_PAGE]
+        entry = last_ten_entries[0]
+
         response = self.client.get(
             reverse('httplog:requests-history'),
             HTTP_X_REQUESTED_WITH='XMLHttpRequest'
         )
 
+        self.assertTrue(entry.method in response.content)
+        self.assertTrue(entry.host in response.content)
+        self.assertTrue(entry.path in response.content)
+
         self.assertEqual(
             len(response.context['entries']),
-            settings.HTTP_LOG_ENTRIES_ON_PAGE
-        )
+            settings.HTTP_LOG_ENTRIES_ON_PAGE)
+        self.assertEqual(
+            list(response.context['entries']),
+            list(last_ten_entries))
+
