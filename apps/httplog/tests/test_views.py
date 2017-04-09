@@ -73,4 +73,3 @@ class ViewsTest(TestCase):
             list(response.context['entries']),
             list(last_ten_entries)
         )
-
