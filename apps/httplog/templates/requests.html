@@ -4,15 +4,26 @@
 {% block title %}Requests{% endblock title %}
 
 {% block main_content %}
-     <div class="col-md-12 request-history"></div>
+    {% csrf_token %}
+    <div class="col-md-12 request-history"></div>
 {% endblock %}
 
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'lib/jquery-ui/css/jquery-ui.min.css' %}">
+{% endblock extra_head %}
+
 {% block extrascripts %}
+    <script src="{% static 'lib/jquery-ui/js/jquery-ui.min.js' %}"></script>
     <script src="{% static 'js/requests.js' %}"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
-            requests.init("{% url 'httplog:requests-history' %}");
+            var opts = {
+                title: document.title,
+                url: "{% url 'httplog:requests-history' %}"
+            };
+
+            requests.init(opts);
         });
     </script>
 {% endblock extrascripts %}
