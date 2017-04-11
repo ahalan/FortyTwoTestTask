@@ -11,7 +11,6 @@ var requests = {
         self.title = opts.title;
         self.history_url = opts.url;
         self.is_init = true;
-        self.interval = 0;
         self.sort_enabled = false;
 
         self.isFocused(self);
