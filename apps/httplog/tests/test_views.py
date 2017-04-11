@@ -35,7 +35,6 @@ class ViewsTest(TestCase):
         self.assertTrue('entries' in response.context)
         self.assertTrue('non_viewed_count' in response.context)
 
-
     def test_requests_history_is_not_ajax(self):
         """ Test requests history view by not ajax request"""
 
@@ -72,4 +71,3 @@ class ViewsTest(TestCase):
         self.assertEqual(
             list(response.context['entries']),
             list(last_ten_entries))
-
