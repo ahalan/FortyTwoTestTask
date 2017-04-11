@@ -24,7 +24,6 @@ class RequestsHistoryView(View):
     def get(self, request):
         """
         Returns last entries and count of non viewed entries.
-        
         If passed variable 'viewed' = True then all non viewed
         entries will be updated as viewed.
         """
