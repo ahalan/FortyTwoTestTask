@@ -8,6 +8,8 @@ from apps.httplog.models import HttpRequestEntry
 
 
 class MiddlewareTest(TestCase):
+    """ Tests for httplog middlewares """
+
     def setUp(self):
         self.client = Client()
         self.path = reverse('httplog:requests')

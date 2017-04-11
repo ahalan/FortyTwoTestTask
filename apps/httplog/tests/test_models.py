@@ -11,10 +11,11 @@ class ModelTest(TestCase):
     def test_httplog_entry_creation(self):
         """ Test httplog instance creation """
 
-        HttpRequestEntry.objects.create(
+        entry = HttpRequestEntry.objects.create(
             method='GET',
             host='localhost',
             path='/',
             status_code=200
         )
         self.assertEquals(HttpRequestEntry.objects.count(), 1)
+        self.assertEquals(entry.priority, 0)
