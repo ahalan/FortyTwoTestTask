@@ -12,6 +12,7 @@ var requests = {
         self.history_url = opts.url;
         self.is_init = true;
         self.interval = 0;
+        self.sort_enabled = false;
 
         self.isFocused(self);
         self.getRequestHistory(self);
@@ -45,10 +46,20 @@ var requests = {
         };
 
         $(self.tableBodySelector).sortable({
+            start: function (event, ui) {
+                self.sort_enabled = true;
+            },
+
+            stop: function (event, ui) {
+                self.sort_enabled = false;
+
+                setTimeout(function () {
+                    self.getRequestHistory(self);
+                }, self.timeout);
+            },
+
             update: function (event, ui) {
                 var entries = [];
-
-                // clearInterval(self.interval);
 
                 $(self.tableRowSelector).each(function () {
                     var $firstChild = $(this).children('td:first-child');
@@ -73,29 +84,31 @@ var requests = {
                     }
                 });
             },
+
             helper: fixHelper
         }).disableSelection();
 
     },
 
     getRequestHistory: function (self) {
-        $.get(self.url, function (data) {
-            self.requestsBlock.html(data);
+        if (!self.sort_enabled) {
+            $.get(self.url, function (data) {
+                self.requestsBlock.html(data);
 
-            // Update page title with (n) new requests
-            var counter = $(self.nonViewedSelector).val();
-            if (counter != 0) {
-                document.title = self.title + " (" + counter + ")";
-            } else {
-                document.title = self.title;
-            }
+                // Update page title with (n) new requests
+                var counter = $(self.nonViewedSelector).val();
+                if (counter != 0) {
+                    document.title = self.title + " (" + counter + ")";
+                } else {
+                    document.title = self.title;
+                }
 
-            self.initSortable(self);
+                self.initSortable(self);
 
-            self.interval = setInterval(function () {
-                self.getRequestHistory(self);
-            }, self.timeout);
-
-        });
+                setTimeout(function () {
+                    self.getRequestHistory(self);
+                }, self.timeout);
+            });
+        }
     }
 };
