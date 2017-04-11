@@ -71,5 +71,4 @@ class ViewsTest(TestCase):
         )
         self.assertEqual(
             list(response.context['entries']),
-            list(last_ten_entries)
-        )
+            list(last_ten_entries))
