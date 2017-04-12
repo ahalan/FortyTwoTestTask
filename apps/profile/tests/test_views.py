@@ -5,9 +5,51 @@ import json
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
+from django.conf import settings
 
 from apps.profile.forms import ProfileEditForm
 from apps.profile.models import Profile
+
+
+class AuthViewsTests(TestCase):
+    """ Tests for auth views """
+
+    def setUp(self):
+        self.client = Client()
+        self.profile = Profile.objects.first()
+
+    def test_login_page_valid(self):
+        """ Tests for auth with valid data """
+
+        data = {
+            'username': 'ahalan',
+            'password': '12345'
+        }
+        response = self.client.post(
+            reverse('profile:login'), data, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context['user'].is_authenticated())
+        self.assertRedirects(response, settings.LOGIN_REDIRECT_URL)
+
+    def test_login_page_invalid(self):
+        """ Tests for auth with invalid data """
+
+        data = {
+            'username': 'test',
+            'password': 'test'
+        }
+        response = self.client.post(
+            reverse('profile:login'), data, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.context['user'].is_authenticated())
+        self.assertEqual(
+            response.context['form'].errors,
+            {u'__all__': [u'Please enter a correct username and '
+                          u'password. Note that both fields may '
+                          u'be case-sensitive.']}
+        )
 
 
 class ProfileViewsTest(TestCase):
@@ -15,37 +57,52 @@ class ProfileViewsTest(TestCase):
 
     def setUp(self):
         self.client = Client()
+        self.profile = Profile.objects.first()
+        self.edit_url = reverse(
+            'profile:edit', kwargs={'profile_id': self.profile.id}
+        )
 
     def test_home_page(self):
         """ Test homepage view when profile exists """
 
-        profile = Profile.objects.first()
         response = self.client.get(reverse('profile:home'))
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'profile.html')
         self.assertTrue('<!DOCTYPE html>' in response.content)
         self.assertTrue('profile' in response.context.keys())
-        self.assertEqual(profile, response.context['profile'])
+        self.assertEqual(self.profile, response.context['profile'])
 
-        self.assertIn(profile.first_name, response.content)
-        self.assertIn(profile.last_name, response.content)
-        self.assertIn(profile.email, response.content)
-        self.assertIn(profile.jabber, response.content)
-        self.assertIn(profile.skype, response.content)
-        self.assertIn(profile.biography, response.content)
-        self.assertIn(profile.other_contacts, response.content)
+        self.assertIn(self.profile.first_name, response.content)
+        self.assertIn(self.profile.last_name, response.content)
+        self.assertIn(self.profile.email, response.content)
+        self.assertIn(self.profile.jabber, response.content)
+        self.assertIn(self.profile.skype, response.content)
+        self.assertIn(self.profile.biography, response.content)
+        self.assertIn(self.profile.other_contacts, response.content)
 
-    def test_get_edit_page(self):
-        """ Test profile edit view on get request """
+    def test_get_edit_page_with_auth(self):
+        """ Test profile edit view with authorized user """
 
-        response = self.client.get(reverse('profile:edit'))
+        self.client.login(username='ahalan', password='12345')
+        response = self.client.get(self.edit_url, follow=True)
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'edit.html')
         self.assertTrue('<!DOCTYPE html>' in response.content)
         self.assertTrue('form' in response.context.keys())
         self.assertEqual(response.context['form'].__class__, ProfileEditForm)
+
+    def test_get_edit_page_without_auth(self):
+        """ Test profile edit view without authorized user """
+
+        response = self.client.get(self.edit_url, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(
+            response,
+            "{0}?next={1}".format(settings.LOGIN_URL, self.edit_url)
+        )
 
     def test_post_edit_page_valid(self):
         """ Test profile edit view on post request with valid data """
@@ -60,7 +117,8 @@ class ProfileViewsTest(TestCase):
             'other_contacts': '',
             'birthday': '2000-01-01'
         }
-        response = self.client.post(reverse('profile:edit'), data)
+        self.client.login(username='ahalan', password='12345')
+        response = self.client.post(self.edit_url, data)
         content = json.loads(response.content)
 
         self.assertEqual(response.status_code, 200)
@@ -72,7 +130,7 @@ class ProfileViewsTest(TestCase):
 
         data = {
             'first_name': 'test',
-            'last_name': 'test',
+            'last_name': '',
             'biography': '',
             'email': 'INVALID',
             'skype': 'test',
@@ -80,7 +138,8 @@ class ProfileViewsTest(TestCase):
             'other_contacts': '',
             'birthday': 'INVALID'
         }
-        response = self.client.post(reverse('profile:edit'), data)
+        self.client.login(username='ahalan', password='12345')
+        response = self.client.post(self.edit_url, data)
         content = json.loads(response.content)
 
         self.assertEqual(response.status_code, 200)
@@ -103,4 +162,9 @@ class ProfileViewsTest(TestCase):
         self.assertEqual(
             content['payload']['errors']['email'],
             [u'Enter a valid email address.']
+        )
+        self.assertIn('last_name', content['payload']['errors'])
+        self.assertEqual(
+            content['payload']['errors']['last_name'],
+            [u'This field is required.']
         )

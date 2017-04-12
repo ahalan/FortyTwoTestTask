@@ -7,7 +7,7 @@ from apps.profile.forms import ProfileEditForm
 from apps.profile.models import Profile
 
 
-class FormsTest(TestCase):
+class ProfileFormsTest(TestCase):
     """ Tests for profile form """
 
     def setUp(self):
@@ -19,13 +19,14 @@ class FormsTest(TestCase):
 
         data = {
             'first_name': 'test',
+            'last_name': 'test',
             'biography': 'biography test',
         }
         form = ProfileEditForm(data, instance=self.profile)
 
         self.assertTrue(form.is_valid())
 
-    def test_edit_event_invalid(self):
+    def test_edit_event_invalid_field(self):
         """ Tests profile form with invalid data """
 
         data = {
@@ -36,5 +37,17 @@ class FormsTest(TestCase):
         self.assertFalse(form.is_valid())
         self.assertIn('jabber', form.errors)
         self.assertEqual(
-            form.errors['jabber'], [u'Enter a valid email address.']
-        )
+            form.errors['jabber'], [u'Enter a valid email address.'])
+
+    def test_edit_event_required_field(self):
+        """ Tests profile form for required fields """
+
+        form = ProfileEditForm({}, instance=self.profile)
+
+        self.assertFalse(form.is_valid())
+        self.assertIn('first_name', form.errors)
+        self.assertIn('last_name', form.errors)
+        self.assertEqual(
+            form.errors['first_name'], [u'This field is required.'])
+        self.assertEqual(
+            form.errors['last_name'], [u'This field is required.'])
