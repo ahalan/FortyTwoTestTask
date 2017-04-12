@@ -5,7 +5,7 @@ from django.test import TestCase
 from apps.profile.models import Profile
 
 
-class ModelTest(TestCase):
+class ProfileModelTest(TestCase):
     """ Tests for profile models """
 
     def test_profile_creation(self):
