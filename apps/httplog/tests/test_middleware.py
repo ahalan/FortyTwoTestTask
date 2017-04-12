@@ -7,7 +7,7 @@ from django.test.client import Client
 from apps.httplog.models import HttpRequestEntry
 
 
-class MiddlewareTest(TestCase):
+class HttpLogerMiddlewareTest(TestCase):
     def setUp(self):
         self.client = Client()
         self.path = reverse('httplog:requests')

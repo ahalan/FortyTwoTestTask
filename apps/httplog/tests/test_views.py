@@ -8,7 +8,7 @@ from django.test.client import Client
 from apps.httplog.models import HttpRequestEntry
 
 
-class ViewsTest(TestCase):
+class HttpRequestsViewsTest(TestCase):
     """ Tests for httplog views """
 
     def setUp(self):
@@ -71,4 +71,3 @@ class ViewsTest(TestCase):
         self.assertEqual(
             list(response.context['entries']),
             list(last_ten_entries))
-

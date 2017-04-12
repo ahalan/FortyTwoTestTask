@@ -10,7 +10,7 @@ from apps.profile.forms import ProfileEditForm
 from apps.profile.models import Profile
 
 
-class ViewsTest(TestCase):
+class ProfileViewsTest(TestCase):
     """ Tests for profile views """
 
     def setUp(self):
