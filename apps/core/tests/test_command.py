@@ -1,7 +1,5 @@
 from __future__ import unicode_literals
 
-import sys
-
 from django.test import TestCase
 from django.core import management
 from django.db import models
@@ -16,18 +14,14 @@ class CoreCommandTest(TestCase):
         self.models = models.get_models(include_auto_created=True)
 
     def test_get_model_list_command(self):
-        """ Test for core command """
-
-        out = StringIO()
-        saved_stderr = sys.stderr
-        sys.stderr = out
-
-        management.call_command('get_models_list')
+        """ Test output of get_model_list command """
+        out, err = StringIO(), StringIO()
+        management.call_command('get_models_list', stdout=out, stderr=err)
 
         for model in self.models:
-            info = 'error: model - {model}; count - {count}\n'.format(
+            info = "model - {model}; count - {count}\n".format(
                 model=model.__name__,
                 count=model.objects.count())
+            error = "error: {0}".format(info)
             self.assertIn(info, out.getvalue())
-
-        sys.stderr = saved_stderr
+            self.assertIn(error, err.getvalue())

@@ -1,7 +1,5 @@
 from __future__ import unicode_literals
 
-import sys
-
 from django.core.management.base import BaseCommand
 from django.db import models
 
@@ -13,8 +11,10 @@ class Command(BaseCommand):
         all_models = models.get_models(include_auto_created=True)
 
         for model in all_models:
-            sys.stderr.write(
-                'error: model - {model}; count - {count}\n'.format(
-                    model=model.__name__,
-                    count=model.objects.count())
+            model_info = "model - {model}; count - {count}\n".format(
+                model=model.__name__,
+                count=model.objects.count()
             )
+
+            self.stdout.write(model_info)
+            self.stderr.write("error: {0}".format(model_info))
