@@ -30,7 +30,7 @@
       "last_login": "2017-04-04T10:48:40Z",
       "groups": [],
       "user_permissions": [],
-      "password": "qwerty",
+      "password": "pbkdf2_sha256$12000$c11telG9kpnc$PH6eQBASNA8pCrvsXJ8PBNkcpuWLYjzGU9yGE+ycnzE=",
       "email": "halan.andrey@gmail.com",
       "date_joined": "2017-04-04T10:48:40Z"
     }

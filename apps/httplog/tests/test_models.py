@@ -5,7 +5,7 @@ from django.test import TestCase
 from apps.httplog.models import HttpRequestEntry
 
 
-class ModelTest(TestCase):
+class HttpRequestEntryModelTest(TestCase):
     """ Tests for httplog models """
 
     def test_httplog_entry_creation(self):

@@ -3,7 +3,7 @@ from apps.core.models import CrudModelEntry
 from apps.httplog.models import HttpRequestEntry
 
 
-class SingalsTest(TestCase):
+class CrudSingalsTest(TestCase):
     """ Tests for core signals """
 
     def setUp(self):

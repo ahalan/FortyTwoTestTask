@@ -10,7 +10,7 @@ from django.test.client import Client
 from apps.httplog.models import HttpRequestEntry
 
 
-class ViewsTest(TestCase):
+class HttpRequestsViewsTest(TestCase):
     """ Tests for httplog views """
 
     def setUp(self):
@@ -74,8 +74,7 @@ class ViewsTest(TestCase):
         )
         self.assertEqual(
             list(response.context['entries']),
-            list(last_ten_entries)
-        )
+            list(last_ten_entries))
 
     def test_post_requests_history_valid(self):
         """ Test requests history view on update entries priority """
