@@ -88,9 +88,7 @@ class HttpRequestsViewsTest(TestCase):
             {'id': entries[3].id, 'priority': 3},
         ]
         response = self.client.post(
-            reverse('httplog:requests-history'), {
-                'entries': json.dumps(data)
-            }
+            reverse('httplog:requests-history'), {'entries': json.dumps(data)}
         )
 
         self.assertEqual(response.status_code, 200)
