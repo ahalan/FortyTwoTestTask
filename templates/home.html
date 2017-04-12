@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load profile_tags %}
 
 {% block content %}
     {% block header %}
@@ -17,13 +18,12 @@
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        {% block navbar_right_elements %}
-                            {% if user.is_authenticated %}
-                                <li><a href="{% url 'profile:logout' %}">Logout</a></li>
-                            {% else %}
-                                <li><a href="{% url 'profile:login' %}">Login</a></li>
-                            {% endif %}
-                        {% endblock %}
+                        {% if user.is_authenticated %}
+                            <li><a href="{% edit_link user %}">Edit (admin)</a></li>
+                            <li><a href="{% url 'profile:logout' %}">Logout</a></li>
+                        {% else %}
+                            <li><a href="{% url 'profile:login' %}">Login</a></li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>

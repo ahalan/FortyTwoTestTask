@@ -1,11 +1,4 @@
 {% extends "home.html" %}
-{% load profile_tags %}
-
-{% block navbar_right_elements %}
-    <li><a href="{% edit_link profile %}">Edit (admin)</a></li>
-    {{ block.super }}
-{% endblock %}
-
 
 {% block main_content %}
     <div class="col-md-6">
