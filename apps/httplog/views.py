@@ -32,13 +32,14 @@ class RequestsHistoryView(View):
             viewed = request.GET.get('viewed', False)
 
             entries = HttpRequestEntry.objects.all()
+            on_page = entries[:settings.HTTP_LOG_ENTRIES_ON_PAGE]
             new_entries = entries.filter(viewed=False)
 
             if viewed:
                 new_entries.update(viewed=True)
 
             return render(request, self.template_name, {
-                'entries': entries[:settings.HTTP_LOG_ENTRIES_ON_PAGE],
+                'entries': sorted(on_page, key=lambda x: x.priority),
                 'non_viewed_count': new_entries.count()
             })
         return HttpResponseBadRequest()
@@ -47,18 +48,13 @@ class RequestsHistoryView(View):
         """
         Updates entries priority
 
-        Requires list of objects with 'id' and 'priority'
-        entry keys passed in json format.
         """
+        entry_id = request.POST.get('entry_id')
+        priority = request.POST.get('priority')
 
-        entries_json = request.POST.get('entries')
+        if not entry_id or not priority:
+            return HttpResponse("Missing argument `entry_id` or `priority`")
 
-        if not entries_json:
-            return HttpResponse("Missing argument `entries`")
-
-        entries = json.loads(entries_json)
-
-        for entry in entries:
-            HttpRequestEntry.objects.filter(id=entry['id']) \
-                                    .update(priority=int(entry['priority']))
+        HttpRequestEntry.objects.filter(id=entry_id)\
+                                .update(priority=int(priority))
         return HttpResponse("Success")
