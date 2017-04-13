@@ -1,15 +1,18 @@
 var requests = {
     requestsBlock: $(".request-history"),
-
-    tableBodySelector: ".table tbody",
-    tableRowSelector: ".table tbody tr",
     nonViewedSelector: "#non_viewed_count",
+    prioritySelector: ".priority",
 
     init: function (opts) {
         var self = this;
 
         self.title = opts.title;
         self.history_url = opts.url;
+        self.on_page = Number(opts.on_page);
+        self.numbers = []
+        for (var i = 1; i <= opts.on_page; i++) {
+            self.numbers.push(i);
+        }
         self.is_init = true;
         self.sort_enabled = false;
 
@@ -36,63 +39,46 @@ var requests = {
         }
     },
 
-    initSortable: function (self) {
-        var fixHelper = function (e, ui) {
-            ui.children().each(function () {
-                $(this).width($(this).width());
+    fillSelect: function (self) {
+        $(self.prioritySelector).each(function () {
+            var select = $(this);
+            var selected_opt = select.attr('data-value');
+
+            $.each(self.numbers, function (index, value) {
+                var selected = selected_opt == value;
+                select.append(new Option(index + 1, value, selected, selected));
             });
-            return ui;
-        };
+        });
 
-        $(self.tableBodySelector).sortable({
-            start: function (event, ui) {
-                self.sort_enabled = true;
-            },
+        $(self.prioritySelector).focus(function () {
+            self.sort_enabled = true;
+        });
 
-            stop: function (event, ui) {
-                self.sort_enabled = false;
+        $(self.prioritySelector).change(function () {
+            $.ajax({
+                type: "POST",
+                url: self.history_url,
+                data: {
+                    'entry_id': $(this).closest('tr').attr('data-id'),
+                    'priority': $(this).val(),
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                }
+            });
 
-                setTimeout(function () {
-                    self.getRequestHistory(self);
-                }, self.timeout);
-            },
-
-            update: function (event, ui) {
-                var entries = [];
-
-                $(self.tableRowSelector).each(function () {
-                    var $firstChild = $(this).children('td:first-child');
-
-                    $firstChild.html($(this).index());
-
-                    entries.push({
-                        id: $(this).attr('data-id'),
-                        priority: $firstChild.text()
-                    })
-                });
-
-                $.ajax({
-                    type: "POST",
-                    url: self.history_url,
-                    data: {
-                        'entries': JSON.stringify(entries)
-                    },
-                    dataType: 'json',
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-                    }
-                });
-            },
-
-            helper: fixHelper
-        }).disableSelection();
-
+            self.sort_enabled = false;
+            setTimeout(function () {
+                self.getRequestHistory(self);
+            }, self.timeout);
+        });
     },
 
     getRequestHistory: function (self) {
         if (!self.sort_enabled) {
             $.get(self.url, function (data) {
                 self.requestsBlock.html(data);
+                self.fillSelect(self);
 
                 // Update page title with (n) new requests
                 var counter = $(self.nonViewedSelector).val();
@@ -101,8 +87,6 @@ var requests = {
                 } else {
                     document.title = self.title;
                 }
-
-                self.initSortable(self);
 
                 setTimeout(function () {
                     self.getRequestHistory(self);
