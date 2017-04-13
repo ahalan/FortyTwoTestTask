@@ -39,11 +39,11 @@ class HttpRequestEntry(models.Model):
     )
     priority = models.IntegerField(
         verbose_name=_("Priority"),
-        default=0
+        default=1
     )
 
     class Meta:
-        ordering = ['priority', '-time']
+        ordering = ['-time']
         verbose_name = _("Http Request Entry")
         verbose_name_plural = _("Http Request Entries")
 

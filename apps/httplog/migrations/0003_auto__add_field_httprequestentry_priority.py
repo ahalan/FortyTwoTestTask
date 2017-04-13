@@ -10,7 +10,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding field 'HttpRequestEntry.priority'
         db.add_column(u'httplog_httprequestentry', 'priority',
-                      self.gf('django.db.models.fields.IntegerField')(default=0),
+                      self.gf('django.db.models.fields.IntegerField')(default=1),
                       keep_default=False)
 
 
