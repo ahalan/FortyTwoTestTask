@@ -1,7 +1,5 @@
 from __future__ import unicode_literals
 
-import json
-
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.test import TestCase
@@ -56,7 +54,7 @@ class HttpRequestsViewsTest(TestCase):
         """ Test requests history view on elements on page """
 
         last_ten_entries = HttpRequestEntry.objects.all()[
-                  :settings.HTTP_LOG_ENTRIES_ON_PAGE]
+                           :settings.HTTP_LOG_ENTRIES_ON_PAGE]
         entry = last_ten_entries[0]
 
         response = self.client.get(
@@ -76,27 +74,39 @@ class HttpRequestsViewsTest(TestCase):
             list(response.context['entries']),
             list(last_ten_entries))
 
-    def test_post_requests_history_valid(self):
-        """ Test requests history view on update entries priority """
+    def test_post_requests_history_priority_order(self):
+        """ Test priority order after update entries """
 
         entries = HttpRequestEntry.objects.all()[
                   :settings.HTTP_LOG_ENTRIES_ON_PAGE]
-        data = [
-            {'id': entries[0].id, 'priority': 0},
-            {'id': entries[1].id, 'priority': 1},
-            {'id': entries[2].id, 'priority': 2},
-            {'id': entries[3].id, 'priority': 3},
-        ]
+
+        for i, item in enumerate(entries):
+            item.priority = i + 1
+            item.save()
+
+        response = self.client.get(
+            reverse('httplog:requests-history'),
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest'
+        )
+        entries = list(response.context['entries'])
+
+        self.assertEqual(entries[0].priority, 1)
+        self.assertEqual(entries[-1].priority, 10)
+
+    def test_post_requests_history_valid(self):
+        """ Test requests history view on update entries priority """
+
+        entry = HttpRequestEntry.objects.first()
+        payload = {'entry_id': entry.id, 'priority': 2}
         response = self.client.post(
-            reverse('httplog:requests-history'), {'entries': json.dumps(data)}
+            reverse('httplog:requests-history'), payload
         )
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, 'Success')
 
-        for el in data:
-            entry = HttpRequestEntry.objects.get(id=el['id'])
-            self.assertEqual(entry.priority, el['priority'])
+        entry = HttpRequestEntry.objects.get(id=payload['entry_id'])
+        self.assertEqual(entry.priority, payload['priority'])
 
     def test_post_requests_history_invalid(self):
         """ Test requests history view with missing entries argument """
@@ -104,4 +114,6 @@ class HttpRequestsViewsTest(TestCase):
         response = self.client.post(reverse('httplog:requests-history'), {})
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content, 'Missing argument `entries`')
+        self.assertEqual(
+            response.content, 'Missing argument `entry_id` or `priority`'
+        )

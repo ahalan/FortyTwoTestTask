@@ -1,7 +1,5 @@
 from __future__ import unicode_literals
 
-import json
-
 from django.views.generic.base import View, TemplateView
 from django.shortcuts import render
 from django.http import HttpResponseBadRequest, HttpResponse

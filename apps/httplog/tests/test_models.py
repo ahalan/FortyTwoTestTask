@@ -18,4 +18,4 @@ class HttpRequestEntryModelTest(TestCase):
             status_code=200
         )
         self.assertEquals(HttpRequestEntry.objects.count(), 1)
-        self.assertEquals(entry.priority, 0)
+        self.assertEquals(entry.priority, 1)
