@@ -1,6 +1,7 @@
 <table class="table table-condensed">
     <thead>
     <tr>
+        <th>Priority</th>
         <th>Method</th>
         <th>Status code</th>
         <th>Host</th>
@@ -11,7 +12,8 @@
     </thead>
     <tbody>
     {% for entry in entries %}
-        <tr class="{% if not entry.viewed %}success{% endif %}">
+        <tr data-id="{{ entry.id }}" class="{% if not entry.viewed %}success{% endif %}">
+            <td><select class="form-control priority" data-value="{{ entry.priority }}"></select></td>
             <td>{{ entry.method }}</td>
             <td>{{ entry.status_code }}</td>
             <td>{{ entry.host }}</td>

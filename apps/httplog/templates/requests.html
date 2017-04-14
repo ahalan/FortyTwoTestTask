@@ -4,7 +4,8 @@
 {% block title %}Requests{% endblock title %}
 
 {% block main_content %}
-     <div class="col-md-12 request-history"></div>
+    {% csrf_token %}
+    <div class="col-md-12 request-history"></div>
 {% endblock %}
 
 {% block extrascripts %}
@@ -12,7 +13,13 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            requests.init("{% url 'httplog:requests-history' %}");
+            var opts = {
+                title: document.title,
+                url: "{% url 'httplog:requests-history' %}",
+                on_page: "{{ on_page }}",
+            };
+
+            requests.init(opts);
         });
     </script>
 {% endblock extrascripts %}
