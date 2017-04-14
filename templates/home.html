@@ -12,7 +12,7 @@
                     <ul class="nav navbar-nav">
                         <li><a href="{% url 'profile:home' %}">Home</a></li>
                         {% if user.is_authenticated and user.profile %}
-                            <li><a href="{% url 'profile:edit' user.profile.id %}">Edit</a></li>
+                            <li><a href="{% url 'profile:edit' %}">Edit</a></li>
                         {% endif %}
                         <li><a href="{% url 'httplog:requests' %}">Requests</a>
                         </li>

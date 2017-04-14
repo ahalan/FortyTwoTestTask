@@ -1,35 +1,39 @@
 {% extends "home.html" %}
 
 {% block main_content %}
-    <div class="col-md-6">
-        <div class="col-md-12"><h4>Name</h4></div>
+    {% if not user.is_authenticated or not user.profile %}
+        {% include 'block/hello.html' %}
+    {% else %}
+        <div class="col-md-6">
+            <div class="col-md-12"><h4>Name</h4></div>
 
-        <div class="col-md-6">First Name:</div>
-        <div class="col-md-6">{{ profile.first_name }}</div>
+            <div class="col-md-6">First Name:</div>
+            <div class="col-md-6">{{ profile.first_name }}</div>
 
-        <div class="col-md-6">Last name:</div>
-        <div class="col-md-6">{{ profile.last_name }}</div>
+            <div class="col-md-6">Last name:</div>
+            <div class="col-md-6">{{ profile.last_name }}</div>
 
-        <div class="col-md-6">Date of birth:</div>
-        <div class="col-md-6">{{ profile.birthday|date:'m-d-Y' }}</div>
+            <div class="col-md-6">Date of birth:</div>
+            <div class="col-md-6">{{ profile.birthday|date:'m-d-Y' }}</div>
 
-        <div class="col-md-6">Biography:</div>
-        <div class="col-md-12">{{ profile.biography|escape }}</div>
-    </div>
+            <div class="col-md-6">Biography:</div>
+            <div class="col-md-12">{{ profile.biography|escape }}</div>
+        </div>
 
-    <div class="col-md-6">
-        <div class="col-md-12"><h4>Contacts</h4></div>
+        <div class="col-md-6">
+            <div class="col-md-12"><h4>Contacts</h4></div>
 
-        <div class="col-md-6">Email:</div>
-        <div class="col-md-6">{{ profile.email }}</div>
+            <div class="col-md-6">Email:</div>
+            <div class="col-md-6">{{ profile.email }}</div>
 
-        <div class="col-md-6">Jabber:</div>
-        <div class="col-md-6">{{ profile.jabber }}</div>
+            <div class="col-md-6">Jabber:</div>
+            <div class="col-md-6">{{ profile.jabber }}</div>
 
-        <div class="col-md-6">Skype:</div>
-        <div class="col-md-6">{{ profile.skype }}</div>
+            <div class="col-md-6">Skype:</div>
+            <div class="col-md-6">{{ profile.skype }}</div>
 
-        <div class="col-md-6">Other contacts:</div>
-        <div class="col-md-12">{{ profile.other_contacts|escape }}</div>
-    </div>
+            <div class="col-md-6">Other contacts:</div>
+            <div class="col-md-12">{{ profile.other_contacts|escape }}</div>
+        </div>
+    {% endif %}
 {% endblock %}
