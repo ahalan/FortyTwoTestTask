@@ -4,7 +4,7 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.views.generic.base import View
 from django.http import HttpResponse
 
@@ -18,7 +18,10 @@ class ProfileHomeView(View):
     template_name = "profile.html"
 
     def get(self, request):
-        profile = Profile.objects.first()
+        try:
+            profile = request.user.profile
+        except (Profile.DoesNotExist, AttributeError):
+            profile = None
         return render(request, self.template_name, {'profile': profile})
 
 
@@ -32,19 +35,18 @@ class ProfileEditView(View):
     def dispatch(self, *args, **kwargs):
         return super(ProfileEditView, self).dispatch(*args, **kwargs)
 
-    def get(self, request, profile_id):
-        profile = get_object_or_404(Profile, id=profile_id)
-        form = self.form_class(instance=profile)
+    def get(self, request):
+        form = self.form_class(instance=request.user.profile)
         return render(request, self.template_name, {'form': form})
 
-    def post(self, request, profile_id):
+    def post(self, request):
         response_data = dict(success=True, payload={})
-        profile = get_object_or_404(Profile, id=profile_id)
         form = self.form_class(
             request.POST,
             request.FILES,
-            instance=profile
+            instance=request.user.profile
         )
+
         if form.is_valid():
             profile = form.save()
             if profile.photo:
