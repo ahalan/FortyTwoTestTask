@@ -45,7 +45,8 @@ class RequestsHistoryView(View):
     def post(self, request):
         """
         Updates entries priority
-
+        
+        Requires arguments: `entry_id` and `priority`
         """
         entry_id = request.POST.get('entry_id')
         priority = request.POST.get('priority')
