@@ -80,16 +80,6 @@ class ProfileViewsTest(TestCase):
         self.assertIn(profile.biography, response.content)
         self.assertIn(profile.other_contacts, response.content)
 
-    def test_home_page_without_auth(self):
-        """ Test homepage view for non authorized user """
-
-        response = self.client.get(self.home_path)
-
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'profile.html')
-        self.assertIsNone(response.context['profile'])
-        self.assertTrue(u'Prodam garaj' in response.content)
-
     def test_get_edit_page_with_auth(self):
         """ Test profile edit view with authorized user """
 
