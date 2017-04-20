@@ -21,7 +21,7 @@ class ProfileHomeView(View):
         try:
             profile = request.user.profile
         except (Profile.DoesNotExist, AttributeError):
-            profile = None
+            profile = Profile.objects.first()
         return render(request, self.template_name, {'profile': profile})
 
 
@@ -36,17 +36,22 @@ class ProfileEditView(View):
         return super(ProfileEditView, self).dispatch(*args, **kwargs)
 
     def get(self, request):
-        form = self.form_class(instance=request.user.profile)
+        try:
+            profile = request.user.profile
+        except (Profile.DoesNotExist, AttributeError):
+            profile = Profile.objects.first()
+
+        form = self.form_class(instance=profile)
         return render(request, self.template_name, {'form': form})
 
     def post(self, request):
         response_data = dict(success=True, payload={})
-        form = self.form_class(
-            request.POST,
-            request.FILES,
-            instance=request.user.profile
-        )
+        try:
+            profile = request.user.profile
+        except (Profile.DoesNotExist, AttributeError):
+            profile = Profile.objects.first()
 
+        form = self.form_class(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             profile = form.save()
             if profile.photo:

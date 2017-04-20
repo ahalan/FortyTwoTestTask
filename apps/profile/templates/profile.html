@@ -1,7 +1,7 @@
 {% extends "home.html" %}
 
 {% block main_content %}
-    {% if not user.is_authenticated or not user.profile %}
+    {% if not profile %}
         {% include 'block/hello.html' %}
     {% else %}
         <div class="col-md-6">
