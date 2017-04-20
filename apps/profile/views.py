@@ -12,16 +12,22 @@ from apps.profile.models import Profile
 from apps.profile.forms import ProfileEditForm
 
 
+def get_user_profile(user):
+    """ Returns user profile if exists else returns first profile """
+    try:
+        profile = user.profile
+    except (Profile.DoesNotExist, AttributeError):
+        profile = Profile.objects.first()
+    return profile
+
+
 class ProfileHomeView(View):
     """ Class based view for home page """
 
     template_name = "profile.html"
 
     def get(self, request):
-        try:
-            profile = request.user.profile
-        except (Profile.DoesNotExist, AttributeError):
-            profile = Profile.objects.first()
+        profile = get_user_profile(request.user)
         return render(request, self.template_name, {'profile': profile})
 
 
@@ -36,22 +42,14 @@ class ProfileEditView(View):
         return super(ProfileEditView, self).dispatch(*args, **kwargs)
 
     def get(self, request):
-        try:
-            profile = request.user.profile
-        except (Profile.DoesNotExist, AttributeError):
-            profile = Profile.objects.first()
-
-        form = self.form_class(instance=profile)
+        form = self.form_class(instance=get_user_profile(request.user))
         return render(request, self.template_name, {'form': form})
 
     def post(self, request):
         response_data = dict(success=True, payload={})
-        try:
-            profile = request.user.profile
-        except (Profile.DoesNotExist, AttributeError):
-            profile = Profile.objects.first()
-
+        profile = get_user_profile(request.user)
         form = self.form_class(request.POST, request.FILES, instance=profile)
+
         if form.is_valid():
             profile = form.save()
             if profile.photo:
