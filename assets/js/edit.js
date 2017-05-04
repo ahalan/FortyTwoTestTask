@@ -17,10 +17,10 @@ var editForm = {
 
         self.elements.dateInput.datepicker({
             format: "yyyy-mm-dd",
-            autoclose: true,
+            autoclose: true
         });
 
-        self.elements.notifications.hide()
+        self.elements.notifications.hide();
 
         self.elements.form.submit(function (e) {
             e.preventDefault();
@@ -55,7 +55,7 @@ var editForm = {
 
                 if (data.success) {
                     self.elements.notifications.show();
-                    self.elements.notificationsText.text('Profile saved successfully!')
+                    self.elements.notificationsText.text('Profile saved successfully!');
                     self.elements.thumbnailImg.attr('src', data.payload.photo_url)
                 } else {
                     $.each(data.payload.errors, function (key, value) {
