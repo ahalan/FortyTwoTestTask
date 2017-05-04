@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 import json
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.shortcuts import render
@@ -17,7 +18,7 @@ def get_user_profile(user):
     try:
         profile = user.profile
     except (Profile.DoesNotExist, AttributeError):
-        profile = Profile.objects.first()
+        profile = Profile.objects.get(id=settings.DEFAULT_PROFILE_ID)
     return profile
 
 
