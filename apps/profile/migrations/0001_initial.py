@@ -3,14 +3,11 @@ from south.utils import datetime_utils as datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
-from django.core.management import call_command
 
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        call_command("flush")
-
         # Adding model 'Profile'
         db.create_table(u'profile_profile', (
             (u'user_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True, primary_key=True)),
