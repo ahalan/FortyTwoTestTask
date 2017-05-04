@@ -2,14 +2,24 @@ from __future__ import unicode_literals
 
 import json
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.views.generic.base import View
 from django.http import HttpResponse
 
 from apps.profile.models import Profile
 from apps.profile.forms import ProfileEditForm
+
+
+def get_user_profile(user):
+    """ Returns user profile if exists else returns first profile """
+    try:
+        profile = user.profile
+    except (Profile.DoesNotExist, AttributeError):
+        profile = Profile.objects.get(id=settings.DEFAULT_PROFILE_ID)
+    return profile
 
 
 class ProfileHomeView(View):
@@ -18,7 +28,7 @@ class ProfileHomeView(View):
     template_name = "profile.html"
 
     def get(self, request):
-        profile = Profile.objects.first()
+        profile = get_user_profile(request.user)
         return render(request, self.template_name, {'profile': profile})
 
 
@@ -32,19 +42,15 @@ class ProfileEditView(View):
     def dispatch(self, *args, **kwargs):
         return super(ProfileEditView, self).dispatch(*args, **kwargs)
 
-    def get(self, request, profile_id):
-        profile = get_object_or_404(Profile, id=profile_id)
-        form = self.form_class(instance=profile)
+    def get(self, request):
+        form = self.form_class(instance=get_user_profile(request.user))
         return render(request, self.template_name, {'form': form})
 
-    def post(self, request, profile_id):
+    def post(self, request):
         response_data = dict(success=True, payload={})
-        profile = get_object_or_404(Profile, id=profile_id)
-        form = self.form_class(
-            request.POST,
-            request.FILES,
-            instance=profile
-        )
+        profile = get_user_profile(request.user)
+        form = self.form_class(request.POST, request.FILES, instance=profile)
+
         if form.is_valid():
             profile = form.save()
             if profile.photo:

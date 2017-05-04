@@ -2,13 +2,13 @@ from __future__ import unicode_literals
 
 import json
 
+from django.conf import settings
+from django.contrib import auth
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
-from django.conf import settings
 
 from apps.profile.forms import ProfileEditForm
-from apps.profile.models import Profile
 
 
 class AuthViewsTests(TestCase):
@@ -16,7 +16,6 @@ class AuthViewsTests(TestCase):
 
     def setUp(self):
         self.client = Client()
-        self.profile = Profile.objects.first()
 
     def test_login_page_valid(self):
         """ Tests for auth with valid data """
@@ -57,35 +56,35 @@ class ProfileViewsTest(TestCase):
 
     def setUp(self):
         self.client = Client()
-        self.profile = Profile.objects.first()
-        self.edit_url = reverse(
-            'profile:edit', kwargs={'profile_id': self.profile.id}
-        )
+        self.home_path = reverse('profile:home')
+        self.edit_path = reverse('profile:edit')
 
-    def test_home_page(self):
-        """ Test homepage view when profile exists """
+    def test_home_page_with_auth(self):
+        """ Test homepage view for authorized user with profile """
 
-        response = self.client.get(reverse('profile:home'))
+        self.client.login(username='ahalan', password='12345')
+        response = self.client.get(self.home_path)
+        profile = auth.get_user(self.client).profile
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'profile.html')
         self.assertTrue('<!DOCTYPE html>' in response.content)
         self.assertTrue('profile' in response.context.keys())
-        self.assertEqual(self.profile, response.context['profile'])
+        self.assertEqual(profile, response.context['profile'])
 
-        self.assertIn(self.profile.first_name, response.content)
-        self.assertIn(self.profile.last_name, response.content)
-        self.assertIn(self.profile.email, response.content)
-        self.assertIn(self.profile.jabber, response.content)
-        self.assertIn(self.profile.skype, response.content)
-        self.assertIn(self.profile.biography, response.content)
-        self.assertIn(self.profile.other_contacts, response.content)
+        self.assertIn(profile.first_name, response.content)
+        self.assertIn(profile.last_name, response.content)
+        self.assertIn(profile.email, response.content)
+        self.assertIn(profile.jabber, response.content)
+        self.assertIn(profile.skype, response.content)
+        self.assertIn(profile.biography, response.content)
+        self.assertIn(profile.other_contacts, response.content)
 
     def test_get_edit_page_with_auth(self):
         """ Test profile edit view with authorized user """
 
         self.client.login(username='ahalan', password='12345')
-        response = self.client.get(self.edit_url, follow=True)
+        response = self.client.get(self.edit_path, follow=True)
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'edit.html')
@@ -96,12 +95,12 @@ class ProfileViewsTest(TestCase):
     def test_get_edit_page_without_auth(self):
         """ Test profile edit view without authorized user """
 
-        response = self.client.get(self.edit_url, follow=True)
+        response = self.client.get(self.edit_path, follow=True)
 
         self.assertEqual(response.status_code, 200)
         self.assertRedirects(
             response,
-            "{0}?next={1}".format(settings.LOGIN_URL, self.edit_url)
+            "{0}?next={1}".format(settings.LOGIN_URL, self.edit_path)
         )
 
     def test_post_edit_page_valid(self):
@@ -118,7 +117,7 @@ class ProfileViewsTest(TestCase):
             'birthday': '2000-01-01'
         }
         self.client.login(username='ahalan', password='12345')
-        response = self.client.post(self.edit_url, data)
+        response = self.client.post(self.edit_path, data)
         content = json.loads(response.content)
 
         self.assertEqual(response.status_code, 200)
@@ -139,7 +138,7 @@ class ProfileViewsTest(TestCase):
             'birthday': 'INVALID'
         }
         self.client.login(username='ahalan', password='12345')
-        response = self.client.post(self.edit_url, data)
+        response = self.client.post(self.edit_path, data)
         content = json.loads(response.content)
 
         self.assertEqual(response.status_code, 200)

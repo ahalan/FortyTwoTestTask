@@ -14,7 +14,7 @@ class ProfileFormsTest(TestCase):
         self.client = Client()
         self.profile = Profile.objects.first()
 
-    def test_edit_event_valid(self):
+    def test_edit_profile_valid(self):
         """ Test profile form with valid data """
 
         data = {
@@ -26,7 +26,7 @@ class ProfileFormsTest(TestCase):
 
         self.assertTrue(form.is_valid())
 
-    def test_edit_event_invalid_field(self):
+    def test_edit_profile_invalid_field(self):
         """ Tests profile form with invalid data """
 
         data = {
@@ -39,7 +39,7 @@ class ProfileFormsTest(TestCase):
         self.assertEqual(
             form.errors['jabber'], [u'Enter a valid email address.'])
 
-    def test_edit_event_required_field(self):
+    def test_edit_profile_required_field(self):
         """ Tests profile form for required fields """
 
         form = ProfileEditForm({}, instance=self.profile)
