@@ -10,7 +10,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding field 'HttpRequestEntry.priority'
         db.add_column(u'httplog_httprequestentry', 'priority',
-                      self.gf('django.db.models.fields.IntegerField')(default=1),
+                      self.gf('django.db.models.fields.IntegerField')(default=1, null=True, blank=True),
                       keep_default=False)
 
 
@@ -21,12 +21,12 @@ class Migration(SchemaMigration):
 
     models = {
         u'httplog.httprequestentry': {
-            'Meta': {'ordering': "[u'-priority', u'-time']", 'object_name': 'HttpRequestEntry'},
+            'Meta': {'ordering': "[u'-time']", 'object_name': 'HttpRequestEntry'},
             'host': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'method': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'path': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'priority': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
+            'priority': ('django.db.models.fields.IntegerField', [], {'default': '1', 'null': 'True', 'blank': 'True'}),
             'status_code': ('django.db.models.fields.IntegerField', [], {}),
             'time': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'user_agent': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),

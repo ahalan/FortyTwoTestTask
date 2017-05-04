@@ -39,7 +39,8 @@ class HttpRequestEntry(models.Model):
     )
     priority = models.IntegerField(
         verbose_name=_("Priority"),
-        default=1
+        default=1,
+        blank=True, null=True
     )
 
     class Meta:
