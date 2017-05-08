@@ -15,10 +15,13 @@ from apps.profile.forms import ProfileEditForm
 
 def get_user_profile(user):
     """ Returns user profile if exists else returns first profile """
-    try:
+    if not hasattr(user, 'profile'):
+        try:
+            profile = Profile.objects.get(id=settings.DEFAULT_PROFILE_ID)
+        except Profile.DoesNotExist:
+            profile = None
+    else:
         profile = user.profile
-    except (Profile.DoesNotExist, AttributeError):
-        profile = Profile.objects.get(id=settings.DEFAULT_PROFILE_ID)
     return profile
 
 
