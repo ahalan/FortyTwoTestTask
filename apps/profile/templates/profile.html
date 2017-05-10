@@ -17,7 +17,7 @@
             <div class="col-md-6">{{ profile.birthday|date:'m-d-Y' }}</div>
 
             <div class="col-md-6">Biography:</div>
-            <div class="col-md-12">{{ profile.biography|escape }}</div>
+            <div class="col-md-12">{{ profile.biography|linebreaks|escape }}</div>
         </div>
 
         <div class="col-md-6">
@@ -33,7 +33,7 @@
             <div class="col-md-6">{{ profile.skype }}</div>
 
             <div class="col-md-6">Other contacts:</div>
-            <div class="col-md-12">{{ profile.other_contacts|escape }}</div>
+            <div class="col-md-12">{{ profile.other_contacts|linebreaks|escape }}</div>
         </div>
     {% endif %}
 {% endblock %}
