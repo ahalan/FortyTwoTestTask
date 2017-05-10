@@ -4,8 +4,8 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.shortcuts import render
-from django.views.generic.base import View
+from django.views.generic.base import TemplateView
+from django.views.generic.edit import UpdateView
 from django.http import HttpResponse
 
 from apps.profile.models import Profile
@@ -22,17 +22,18 @@ def get_user_profile(user):
     return profile
 
 
-class ProfileHomeView(View):
+class ProfileHomeView(TemplateView):
     """ Class based view for home page """
 
     template_name = "profile.html"
 
-    def get(self, request):
-        profile = get_user_profile(request.user)
-        return render(request, self.template_name, {'profile': profile})
+    def get_context_data(self, **kwargs):
+        context = super(ProfileHomeView, self).get_context_data(**kwargs)
+        context['profile'] = get_user_profile(self.request.user)
+        return context
 
 
-class ProfileEditView(View):
+class ProfileEditView(UpdateView):
     """ Class based view editing profile """
 
     template_name = "edit.html"
@@ -42,22 +43,35 @@ class ProfileEditView(View):
     def dispatch(self, *args, **kwargs):
         return super(ProfileEditView, self).dispatch(*args, **kwargs)
 
-    def get(self, request):
-        form = self.form_class(instance=get_user_profile(request.user))
-        return render(request, self.template_name, {'form': form})
+    def get_object(self, queryset=None):
+        return get_user_profile(self.request.user)
 
-    def post(self, request):
-        response_data = dict(success=True, payload={})
-        profile = get_user_profile(request.user)
-        form = self.form_class(request.POST, request.FILES, instance=profile)
+    def form_valid(self, form):
+        if self.request.is_ajax():
+            context = {
+                'success': True,
+                'payload': {}
+            }
+            self.object = form.save()
 
-        if form.is_valid():
-            profile = form.save()
-            if profile.photo:
-                response_data['payload']['photo_url'] = profile.photo.url
-        else:
-            response_data['success'] = False
-            response_data['payload']['errors'] = dict(form.errors.items())
+            if self.object.photo:
+                context['payload']['photo_url'] = self.object.photo.url
+            return self.render_to_json_response(context)
 
-        return HttpResponse(json.dumps(response_data),
-                            content_type="application/json")
+        return super(ProfileEditView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            context = {
+                'success': False,
+                'payload': {
+                    'errors': dict(form.errors.items())
+                }
+            }
+            return self.render_to_json_response(context)
+
+        return super(ProfileEditView, self).form_valid(form)
+
+    def render_to_json_response(self, context, **response_kwargs):
+        response_kwargs['content_type'] = 'application/json'
+        return HttpResponse(json.dumps(context), **response_kwargs)

@@ -145,7 +145,9 @@ class ProfileEditViewsTest(TestCase):
             'birthday': '2000-01-01'
         }
         self.client.login(username='ahalan', password='12345')
-        response = self.client.post(self.edit_path, data)
+        response = self.client.post(
+            self.edit_path, data, HTTP_X_REQUESTED_WITH='XMLHttpRequest'
+        )
         content = json.loads(response.content)
 
         self.assertEqual(response.status_code, 200)
@@ -166,7 +168,9 @@ class ProfileEditViewsTest(TestCase):
             'birthday': 'INVALID'
         }
         self.client.login(username='ahalan', password='12345')
-        response = self.client.post(self.edit_path, data)
+        response = self.client.post(
+            self.edit_path, data, HTTP_X_REQUESTED_WITH='XMLHttpRequest'
+        )
         content = json.loads(response.content)
 
         self.assertEqual(response.status_code, 200)
