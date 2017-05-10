@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 
 import json
 
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.shortcuts import render
@@ -15,11 +14,9 @@ from apps.profile.forms import ProfileEditForm
 
 def get_user_profile(user):
     """ Returns user profile if exists else returns first profile """
+
     if not hasattr(user, 'profile'):
-        try:
-            profile = Profile.objects.get(id=settings.DEFAULT_PROFILE_ID)
-        except Profile.DoesNotExist:
-            profile = None
+        profile = Profile.objects.first()
     else:
         profile = user.profile
     return profile

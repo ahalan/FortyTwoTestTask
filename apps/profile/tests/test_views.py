@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
 
+from apps.profile.models import Profile
 from apps.profile.forms import ProfileEditForm
 
 
@@ -51,13 +52,12 @@ class AuthViewsTests(TestCase):
         )
 
 
-class ProfileViewsTest(TestCase):
+class ProfileHomeViewsTest(TestCase):
     """ Tests for profile views """
 
     def setUp(self):
         self.client = Client()
         self.home_path = reverse('profile:home')
-        self.edit_path = reverse('profile:edit')
 
     def test_home_page_with_auth(self):
         """ Test homepage view for authorized user with profile """
@@ -79,6 +79,34 @@ class ProfileViewsTest(TestCase):
         self.assertIn(profile.skype, response.content)
         self.assertIn(profile.biography, response.content)
         self.assertIn(profile.other_contacts, response.content)
+
+    def test_home_page_without_auth(self):
+        """ Test homepage view for non-authorized user """
+
+        response = self.client.get(self.home_path)
+        profile = Profile.objects.first()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'profile.html')
+        self.assertTrue('<!DOCTYPE html>' in response.content)
+        self.assertTrue('profile' in response.context.keys())
+        self.assertEqual(profile, response.context['profile'])
+
+        self.assertIn(profile.first_name, response.content)
+        self.assertIn(profile.last_name, response.content)
+        self.assertIn(profile.email, response.content)
+        self.assertIn(profile.jabber, response.content)
+        self.assertIn(profile.skype, response.content)
+        self.assertIn(profile.biography, response.content)
+        self.assertIn(profile.other_contacts, response.content)
+
+
+class ProfileEditViewsTest(TestCase):
+    """ Tests for profile edit views """
+
+    def setUp(self):
+        self.client = Client()
+        self.edit_path = reverse('profile:edit')
 
     def test_get_edit_page_with_auth(self):
         """ Test profile edit view with authorized user """
