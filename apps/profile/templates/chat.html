@@ -1,0 +1,104 @@
+{% extends "home.html" %}
+{% load staticfiles %}
+
+{% block title %}Messaging{% endblock %}
+
+{% block main_content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 current-chat">
+            <div class="row current-chat-area">
+                <div class="col-md-12">
+                      <ul class="media-list">
+                        <li class="media">
+                            <div class="media-body">
+                                <div class="media">
+                                    <a class="pull-left" href="#">
+                                        <img class="media-object img-circle" src="http://www.lovemarks.com/wp-content/uploads/profile-avatars/default-avatar-rainbow-unicorn.png">
+                                    </a>
+                                    <div class="media-body">
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                        Phasellus vel diam quis libero dignissim ullamcorper.
+                                        <br>
+                                       <small class="text-muted">Some Guy | 23rd June at 5:00pm</small>
+                                        <hr>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li class="media">
+                            <div class="media-body">
+                                <div class="media">
+                                    <a class="pull-left" href="#">
+                                        <img class="media-object img-circle " src="https://t3.ftcdn.net/jpg/01/18/06/32/240_F_118063283_FD6CvzN1v1LFEMupsqEfuOkPbfjuO0CU.jpg">
+                                    </a>
+                                    <div class="media-body">
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                        Phasellus vel diam quis libero dignissim ullamcorper.
+                                        <br>
+                                       <small class="text-muted">Andrey Halan | 23rd June at 5:00pm</small>
+                                        <hr>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="media">
+                            <div class="media-body">
+                                <div class="media">
+                                    <a class="pull-left" href="#">
+                                        <img class="media-object img-circle " src="http://www.lovemarks.com/wp-content/uploads/profile-avatars/default-avatar-rainbow-unicorn.png">
+                                    </a>
+                                    <div class="media-body">
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                        Phasellus vel diam quis libero dignissim ullamcorper.
+                                        <br>
+                                       <small class="text-muted">Some Guy | 23rd June at 5:00pm</small>
+                                        <hr>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="media">
+                            <div class="media-body">
+                                <div class="media">
+                                    <a class="pull-left" href="#">
+                                        <img class="media-object img-circle" src="https://t3.ftcdn.net/jpg/01/18/06/32/240_F_118063283_FD6CvzN1v1LFEMupsqEfuOkPbfjuO0CU.jpg">
+                                    </a>
+                                    <div class="media-body">
+v                                       Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                        Phasellus vel diam quis libero dignissim ullamcorper.
+                                        <br>
+                                       <small class="text-muted">Andrey Halan | 23rd June at 5:00pm</small>
+                                        <hr>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row current-chat-footer">
+            <div class="panel-footer">
+                <div class="input-group">
+                  <input type="text" class="form-control">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">Send</button>
+                  </span>
+                </div>
+                </div>
+            </div>
+		</div>
+        <div class="col-md-4">
+        	 <div class="row chats-row">
+                <div class="col-md-12">
+                    <h5 class="panel-heading">Online members <span class="badge">2</span></h5>
+                    <img src="https://i.stack.imgur.com/uBnTY.png" alt="..." class="img-responsive">
+        	    </div>
+        	 </div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

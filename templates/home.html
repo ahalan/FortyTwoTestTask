@@ -16,6 +16,7 @@
                         {% endif %}
                         <li><a href="{% url 'httplog:requests' %}">Requests</a>
                         </li>
+                        <li><a href="{% url 'profile:chat' %}">Chat</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         {% if user.is_authenticated %}

@@ -75,3 +75,9 @@ class ProfileEditView(UpdateView):
     def render_to_json_response(self, context, **response_kwargs):
         response_kwargs['content_type'] = 'application/json'
         return HttpResponse(json.dumps(context), **response_kwargs)
+
+
+class ChatView(TemplateView):
+    """ Class based view for chat page """
+
+    template_name = "chat.html"
