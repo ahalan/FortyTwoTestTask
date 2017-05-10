@@ -33,3 +33,24 @@ class HttpRequestEntryModelTest(TestCase):
             error_msg = context.exception.message
             self.assertContains('status_code', error_msg)
             self.assertContains('NOT NULL constraint failed', error_msg)
+
+    def test_httplog_entry_priority_order(self):
+        """ Test httplog instance ordering """
+
+        HttpRequestEntry.objects.bulk_create([
+            HttpRequestEntry(
+                method='GET',
+                host='localhost',
+                path='/',
+                status_code=200
+            ) for i in range(10)
+        ])
+
+        entry_before = HttpRequestEntry.objects.first()
+        self.assertEquals(entry_before.priority, 1)
+
+        entry_before.priority = 10
+        entry_before.save()
+
+        entry_after = HttpRequestEntry.objects.first()
+        self.assertEquals(entry_after.priority, 10)

@@ -90,8 +90,8 @@ class HttpRequestsViewsTest(TestCase):
         )
         entries = list(response.context['entries'])
 
-        self.assertEqual(entries[0].priority, 1)
-        self.assertEqual(entries[-1].priority, 10)
+        self.assertEqual(entries[0].priority, 10)
+        self.assertEqual(entries[-1].priority, 1)
 
     def test_post_requests_history_valid(self):
         """ Test requests history view on update entries priority """

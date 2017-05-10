@@ -37,7 +37,7 @@ class RequestsHistoryView(View):
                 new_entries.update(viewed=True)
 
             return render(request, self.template_name, {
-                'entries': sorted(on_page, key=lambda x: x.priority),
+                'entries': on_page,
                 'non_viewed_count': new_entries.count()
             })
         return HttpResponseBadRequest()
