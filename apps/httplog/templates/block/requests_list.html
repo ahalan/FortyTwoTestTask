@@ -1,25 +1,33 @@
 <table class="table table-condensed">
     <thead>
     <tr>
-        <th>Priority</th>
-        <th>Method</th>
+        <th data-field="priority">
+            <button type="button" class="btn btn-default btn-link">
+               Priority <span class="glyphicon glyphicon-sort-by-attributes" aria-hidden="true"></span>
+            </button>
+        </th>
+        <th data-field="time">
+            <button type="button" class="btn btn-default btn-link">
+                Time <span class="glyphicon glyphicon-sort-by-attributes" aria-hidden="true"></span>
+            </button>
+        </th>
+        <th >Method</th>
         <th>Status code</th>
         <th>Host</th>
         <th>Path</th>
         <th>User agent</th>
-        <th>Date</th>
     </tr>
     </thead>
     <tbody>
     {% for entry in entries %}
         <tr data-id="{{ entry.id }}" class="{% if not entry.viewed %}success{% endif %}">
             <td><select class="form-control priority" data-value="{{ entry.priority }}"></select></td>
-            <td>{{ entry.method }}</td>
-            <td>{{ entry.status_code }}</td>
-            <td>{{ entry.host }}</td>
-            <td>{{ entry.path }}</td>
-            <td>{{ entry.user_agent }}</td>
-            <td>{{ entry.time }}</td>
+            <td class="col-md-2">{{ entry.time }}</td>
+            <td class="col-md-1">{{ entry.method }}</td>
+            <td class="col-md-1">{{ entry.status_code }}</td>
+            <td class="col-md-1">{{ entry.host }}</td>
+            <td class="col-md-1">{{ entry.path }}</td>
+            <td class="col-md-5">{{ entry.user_agent }}</td>
         </tr>
     {% endfor %}
     </tbody>

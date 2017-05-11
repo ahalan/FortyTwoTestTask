@@ -86,6 +86,7 @@ class HttpRequestsViewsTest(TestCase):
 
         response = self.client.get(
             reverse('httplog:requests-history'),
+            {'order_by': 'priority'},
             HTTP_X_REQUESTED_WITH='XMLHttpRequest'
         )
         entries = list(response.context['entries'])

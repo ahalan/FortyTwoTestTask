@@ -1,5 +1,6 @@
 var requests = {
     requestsBlock: $(".request-history"),
+    orderingButtonSelector: 'table .btn-link',
     nonViewedSelector: "#non_viewed_count",
     prioritySelector: ".priority",
 
@@ -9,12 +10,13 @@ var requests = {
         self.title = opts.title;
         self.history_url = opts.url;
         self.on_page = Number(opts.on_page);
-        self.numbers = []
+        self.numbers = [];
         for (var i = 1; i <= opts.on_page; i++) {
             self.numbers.push(i);
         }
         self.is_init = true;
         self.sort_enabled = false;
+        self.order_by = 'time';
 
         self.isFocused(self);
         self.getRequestHistory(self);
@@ -26,13 +28,12 @@ var requests = {
 
     isFocused: function (self) {
         self.timeout = 1000;
-        self.url = self.history_url;
 
         if (self.is_init) {
             self.is_init = false;
         } else {
             if (!document.hidden) {
-                self.url = self.history_url + "?viewed=true";
+                self.viewed = true;
             } else {
                 self.timeout = 800;
             }
@@ -76,7 +77,10 @@ var requests = {
 
     getRequestHistory: function (self) {
         if (!self.sort_enabled) {
-            $.get(self.url, function (data) {
+            var url = self.history_url + "?order_by=" + self.order_by;
+            if (self.viewed) url = url + "&viewed=true";
+
+            $.get(url, function (data) {
                 self.requestsBlock.html(data);
                 self.fillSelect(self);
 
@@ -87,6 +91,10 @@ var requests = {
                 } else {
                     document.title = self.title;
                 }
+
+                $(self.orderingButtonSelector).on('click', function () {
+                    self.order_by = $(this).parent().attr('data-field');
+                });
 
                 setTimeout(function () {
                     self.getRequestHistory(self);

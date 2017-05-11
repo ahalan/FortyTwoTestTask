@@ -28,8 +28,13 @@ class RequestsHistoryView(View):
 
         if request.is_ajax():
             viewed = request.GET.get('viewed', False)
+            order_by = request.GET.get('order_by', 'time')
+            ordering = {
+                'time': ['-time'],
+                'priority': ['-priority', '-time']
+            }
 
-            entries = HttpRequestEntry.objects.all()
+            entries = HttpRequestEntry.objects.order_by(*ordering[order_by])
             on_page = entries[:settings.HTTP_LOG_ENTRIES_ON_PAGE]
             new_entries = entries.filter(viewed=False)
 
