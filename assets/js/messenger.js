@@ -96,6 +96,9 @@ var Messenger = {
                 response.messages.forEach(function (message) {
                     self.displayContents(self, message.entry, message.timetoken);
                 });
+                self.elements.messageArea.animate({
+                    scrollTop: self.elements.messageArea.prop("scrollHeight")
+                }, 1000);
             }
         );
     },
