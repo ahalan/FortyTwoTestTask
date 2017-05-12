@@ -77,7 +77,11 @@ class ProfileEditView(UpdateView):
         return HttpResponse(json.dumps(context), **response_kwargs)
 
 
-class ChatView(TemplateView):
-    """ Class based view for chat page """
+class MessengerView(TemplateView):
+    """ Class based view for messenger page """
 
-    template_name = "chat.html"
+    template_name = "messenger.html"
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(MessengerView, self).dispatch(*args, **kwargs)

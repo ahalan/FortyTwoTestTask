@@ -199,3 +199,33 @@ class ProfileEditViewsTest(TestCase):
             content['payload']['errors']['last_name'],
             [u'This field is required.']
         )
+
+
+class MessengerViewsTest(TestCase):
+    """ Tests for profile edit views """
+
+    def setUp(self):
+        self.client = Client()
+        self.messenger_path = reverse('profile:messenger')
+
+    def test_messenger_page_with_auth(self):
+        """ Test messenger view with auth """
+
+        self.client.login(username='ahalan', password='12345')
+        response = self.client.get(self.messenger_path, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'messenger.html')
+        self.assertTrue('<!DOCTYPE html>' in response.content)
+        self.assertTrue(response.context['user'].is_authenticated())
+
+    def test_messenger_page_without_auth(self):
+        """ Test messenger view without auth """
+
+        response = self.client.get(self.messenger_path, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(
+            response,
+            "{0}?next={1}".format(settings.LOGIN_URL, self.messenger_path)
+        )
