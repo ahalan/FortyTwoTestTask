@@ -16,7 +16,7 @@
             var opts = {
                 title: document.title,
                 url: "{% url 'httplog:requests-history' %}",
-                on_page: "{{ on_page }}"
+                on_page: "{{ settings.HTTP_LOG_ENTRIES_ON_PAGE }}"
             };
 
             requests.init(opts);

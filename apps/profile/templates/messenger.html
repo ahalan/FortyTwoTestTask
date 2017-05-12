@@ -4,58 +4,16 @@
 {% block title %}Messenger{% endblock %}
 
 {% block main_content %}
+
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-8 current-chat">
-            <div class="row current-chat-area">
+        <div class="col-md-8 chat">
+            <div class="row chat-area">
                 <div class="col-md-12">
-                      <ul class="chat">
-                        <li class="clearfix">
-                            <div class="chat-body clearfix">
-                                <div class="header">
-                                    <strong class="primary-font">Halan Andrey</strong>
-                                    <small class="pull-right text-muted">
-                                        <span class="glyphicon glyphicon-time"></span>10 May at 5:00pm
-                                    </small>
-                                </div>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare
-                                    dolor, quis ullamcorper ligula sodales.
-                                </p>
-                            </div>
-                        </li>
-                                                  <li class="clearfix">
-                            <div class="chat-body clearfix">
-                                <div class="header">
-                                    <strong class="primary-font">Halan Andrey</strong>
-                                    <small class="pull-right text-muted">
-                                        <span class="glyphicon glyphicon-time"></span>10 May at 5:00pm
-                                    </small>
-                                </div>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare
-                                    dolor, quis ullamcorper ligula sodales.
-                                </p>
-                            </div>
-                        </li>
-                                                  <li class="clearfix">
-                            <div class="chat-body clearfix">
-                                <div class="header">
-                                    <strong class="primary-font">Halan Andrey</strong>
-                                    <small class="pull-right text-muted">
-                                        <span class="glyphicon glyphicon-time"></span>10 May at 5:00pm
-                                    </small>
-                                </div>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare
-                                    dolor, quis ullamcorper ligula sodales.
-                                </p>
-                            </div>
-                        </li>
-                    </ul>
+                      <ul class="chat-messages"></ul>
                 </div>
             </div>
-            <div class="row current-chat-footer">
+            <div class="row chat-footer">
                 <div class="panel-footer">
                     <div class="input-group">
                       <input type="text" class="form-control">
@@ -69,7 +27,7 @@
         <div class="col-md-4">
         	 <div class="row chats-row">
                 <div class="col-md-12">
-                    <h5 class="panel-heading">Online members <span class="badge">1</span></h5>
+                    <h5 class="panel-heading">Online members <span class="badge"></span></h5>
                     <img src="https://i.stack.imgur.com/uBnTY.png" alt="..." class="img-responsive">
         	    </div>
         	 </div>
@@ -78,3 +36,20 @@
 </div>
 
 {% endblock %}
+
+{% block extrascripts %}
+    <script src="{% static 'js/messenger.js' %}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var opts = {
+                subscribeKey: "{{ settings.PUBNUB_SUBSCRIBE_KEY }}",
+                publishKey: "{{ settings.PUBNUB_PUBLISH_KEY }}",
+                username: "{{ user.username }}",
+                channel: "{{ settings.PUBNUB_CHANNEL }}"
+            };
+
+            Messenger.init(opts);
+        });
+    </script>
+{% endblock extrascripts %}

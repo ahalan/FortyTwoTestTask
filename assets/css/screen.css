@@ -8,19 +8,18 @@
     padding: 0px;
 }
 
-.current-chat {
+.chat {
     border: 1px solid #ddd;
 }
 
-.current-chat-area {
+.chat-area {
     padding-top: 10px;
     overflow: auto;
-    height: 80vh;
+    height: 60vh;
 }
 
-.current-chat-footer {
-    position: absolute;
-    bottom: 0;
+.row.chat-footer {
+    margin-right: -30px;
 }
 
 .panel-footer {
@@ -32,33 +31,27 @@ img.media-object {
     height: 64px;
 }
 
-.chat
-{
+.chat-messages {
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-.chat li
-{
+.chat-messages li {
     margin-bottom: 10px;
     padding-bottom: 5px;
     border-bottom: 1px dotted #B3A9A9;
 }
 
-.chat li.left .chat-body
-{
+.chat-messages li.left .chat-messages-body {
     margin-left: 60px;
 }
 
-.chat li.right .chat-body
-{
+.chat-messages li.right .chat-messages-body {
     margin-right: 60px;
 }
 
-
-.chat li .chat-body p
-{
+.chat-messages li .chat-messages-body p {
     margin: 0;
     color: #777777;
 }

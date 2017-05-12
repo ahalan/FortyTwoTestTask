@@ -68,7 +68,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.static",
     "django.core.context_processors.tz",
 
-    "apps.httplog.context_processors.on_page",
+    "apps.core.context_processors.config",
 )
 
 ROOT_URLCONF = 'fortytwo_test_task.urls'
@@ -163,3 +163,8 @@ EXCLUDE_FROM_MODELS_LOG = [
     'Session',
     'LogEntry'
 ]
+
+# PubNub settings
+PUBNUB_SUBSCRIBE_KEY = "sub-c-97c8e58e-34d1-11e7-b3fb-0619f8945a4f"
+PUBNUB_PUBLISH_KEY = "pub-c-978540b3-322c-4515-8907-7335bea9c69a"
+PUBNUB_CHANNEL = "42cc"
