@@ -4,7 +4,8 @@ var Messenger = {
         sendMessageButton: $('.chat-footer button'),
         messageList: $('.chat-messages'),
         messageArea: $('.chat-area'),
-        membersCounterBadge: $('.badge')
+        membersCounterBadge: $('.badge'),
+        inputTypingIndicator: $('.typing-indicator')
     },
 
     init: function (opts) {
@@ -12,6 +13,7 @@ var Messenger = {
 
         self.channel = opts.channel;
         self.uuid = opts.username;
+        self.isUserTyping = false;
 
         self.pubnub = new PubNub({
             subscribeKey: opts.subscribeKey,
@@ -22,24 +24,24 @@ var Messenger = {
 
         self.subscribe(self);
         self.addListener(self);
-
-        self.elements.messageInput.on('keyup', function (e) {
-            (e.keyCode || e.charCode) === 13 && self.publishMessage(self)
-        });
-        self.elements.sendMessageButton.on('click', self.publishMessage(self));
+        self.addEvents(self);
     },
 
-    // hereNow: function (self) {
-    //     self.pubnub.hereNow({
-    //             channels: [self.channel],
-    //         },
-    //         function (status, response) {
-    //             var channel = response.channels[self.channel];
-    //             self.elements.membersCounterBadge.text(channel.occupancy);
-    //             console.log(channel)
-    //         }
-    //     );
-    // },
+    addEvents: function (self) {
+        self.elements.messageInput.on('keyup', function (e) {
+            if (self.elements.messageInput.val() !== '' && !self.isUserTyping) {
+                self.setTypingState(self, true);
+            }
+            if ((e.keyCode || e.charCode) === 13) {
+                self.setTypingState(self, false);
+                self.publishMessage(self);
+            }
+        });
+        self.elements.sendMessageButton.on('click', function (e) {
+            self.setTypingState(self, false);
+            self.publishMessage(self);
+        });
+    },
 
     addListener: function (self) {
         self.pubnub.addListener({
@@ -47,35 +49,8 @@ var Messenger = {
                 self.displayContents(self, m.message);
             },
             presence: function (m) {
-                // if(m.action === 'join') {
-                //     self.pubnub.setState({
-                //             state: {
-                //                 isTyping: false
-                //             },
-                //             channels: [self.channel]
-                //         },
-                //         function (status, response) {
-                //             console.log(status, response)
-                //         }
-                //     );
-                // }
-                //
-                // if(m.action === 'state-change') {
-                //     self.pubnub.setState({
-                //             state: {
-                //                 isTyping: true
-                //             },
-                //             channels: [self.channel]
-                //         },
-                //         function (status, response) {
-                //             console.log(status, response)
-                //         }
-                //     );
-                //     if(m.data.isTyping === true) {
-                //         console.log(m.uuid + ' is typing...')
-                //     }
-                // }
-                // self.displayOccupancy(self, m);
+                self.updateTypingState(self, m);
+                self.displayOccupancy(self, m);
             },
             status: function (status) {
                 if (status.category === 'PNConnectedCategory') {
@@ -105,6 +80,7 @@ var Messenger = {
             if (status.error) console.log(status)
         });
 
+        self.setTypingState(self, false);
         self.elements.messageInput.val('');
         self.elements.messageArea.animate({
             scrollTop: self.elements.messageArea.prop("scrollHeight")
@@ -148,21 +124,47 @@ var Messenger = {
         self.elements.messageList.append(content)
     },
 
-    // displayOccupancy: function (self, presence) {
-    //     self.elements.membersCounterBadge.text(presence.occupancy);
-    //
-    //     if (presence.uuid === self.uuid) return;
-    //     if ((presence.action === 'join')    ||
-    //         (presence.action === 'timeout') ||
-    //         (presence.action === 'leave')) {
-    //
-    //         var status = (presence.action === 'join') ? 'joined' : 'left';
-    //         var message = {
-    //             text: presence.uuid + ' ' + status + ' chat',
-    //             username: presence.uuid,
-    //             action: true
-    //         };
-    //         self.displayContents(self, message)
-    //     }
-    // }
+    displayOccupancy: function (self, presence) {
+        self.elements.membersCounterBadge.text(presence.occupancy);
+
+        if (presence.uuid === self.uuid) return;
+        if ((presence.action === 'join') ||
+            (presence.action === 'timeout') ||
+            (presence.action === 'leave')) {
+
+            var status = (presence.action === 'join') ? 'joined' : 'left';
+            var message = {
+                text: presence.uuid + ' ' + status + ' chat',
+                username: presence.uuid,
+                action: true
+            };
+            self.displayContents(self, message)
+        }
+    },
+
+    setTypingState: function (self, isTyping) {
+        self.isUserTyping = isTyping;
+        self.pubnub.setState({
+            state: {isTyping: self.isUserTyping},
+            channels: [self.channel]
+        });
+    },
+
+    updateTypingState: function (self, event) {
+        // We don't want to receive our own presence events
+        if (event['uuid'] === self.uuid) return;
+
+        // Add typing
+        if (event['action'] === 'state-change' && event['state']['isTyping']) {
+            self.elements.inputTypingIndicator.text(event.uuid + ' is typing...')
+        }
+        // Remove typing
+        else if ((event['action'] === 'state-change' && event['state']['isTyping'] === false) ||
+            event['action'] === 'timeout' ||
+            event['action'] === 'leave') {
+            self.setTypingState(self, false);
+            self.elements.inputTypingIndicator.html('');
+        }
+    }
+
 };
