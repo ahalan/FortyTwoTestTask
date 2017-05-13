@@ -203,7 +203,7 @@ var Messenger = {
         if (self.is_first_init) {
 
             // Add maker for self
-            self.addMarker(self, self.lat, self.lng, self.uuid);
+            if (self.lat && self.lng) self.addMarker(self, self.lat, self.lng, self.uuid);
 
             // Get active users
             self.pubnub.hereNow({

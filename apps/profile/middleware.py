@@ -9,12 +9,17 @@ class GeolocationMiddleware(object):
     def process_request(self, request):
         if request.user.is_authenticated():
             x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+
             if x_forwarded_for:
                 client_ip = x_forwarded_for.split(',')[-1].strip()
             else:
                 client_ip = request.META.get('REMOTE_ADDR')
 
-            coordinates = GeoIP().coords(client_ip) or ('', '')
-            request.user.lng, request.user.lat = coordinates
+            try:
+                latlng = GeoIP().coords(client_ip)
+            except:
+                latlng = None
+
+            request.user.lng, request.user.lat = latlng or (None, None)
 
         return None

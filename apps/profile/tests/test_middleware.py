@@ -14,7 +14,7 @@ class GeolocationMiddlewareTest(TestCase):
     def setUp(self):
         self.locations = {
             '213.109.233.142': [24.709699630737305, 48.92150115966797],
-            '127.0.0.1': ['', '']
+            '127.0.0.1': [None, None]
         }
         self.rf = RequestFactory()
         self.middleware = GeolocationMiddleware()

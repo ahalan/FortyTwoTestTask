@@ -49,8 +49,8 @@
                 publishKey: "{{ settings.PUBNUB_PUBLISH_KEY }}",
                 channel: "{{ settings.PUBNUB_CHANNEL }}",
                 username: "{{ user.username }}",
-                latitude: {{ user.lat }},
-                longitude: {{ user.lng }}
+                latitude: {{ user.lat|default:"0" }},
+                longitude: {{ user.lng|default:"0" }}
             };
 
             Messenger.init(opts);
