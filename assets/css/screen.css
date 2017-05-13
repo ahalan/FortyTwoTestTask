@@ -2,10 +2,16 @@
     display: none;
 }
 
-.chats-row div {
+.chat-sidebar {
     height: 50%;
     border: 1px solid #ddd;
     padding: 0px;
+}
+
+.chat-map {
+    width: 100%;
+    height: 61vh;
+    background-color: grey;
 }
 
 .chat {
@@ -55,3 +61,4 @@ img.media-object {
     margin: 0;
     color: #777777;
 }
+

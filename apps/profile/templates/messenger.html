@@ -7,7 +7,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-8 chat">
+        <div class="col-md-6 chat">
             <div class="row chat-area">
                 <div class="col-md-12">
                       <ul class="chat-messages"></ul>
@@ -22,17 +22,17 @@
                       </span>
                     </div>
                      <p class="help-block typing-indicator"></p>
-
                 </div>
             </div>
 		</div>
-        <div class="col-md-4">
-        	 <div class="row chats-row">
-                <div class="col-md-12">
+        <div class="col-md-6">
+        	 <div class="row">
+                <div class="col-md-12 chat-sidebar">
                     <h5 class="panel-heading">Online members <span class="badge"></span></h5>
-                    <img src="https://i.stack.imgur.com/uBnTY.png" alt="..." class="img-responsive">
         	    </div>
+                 <div class="chat-map"></div>
         	 </div>
+
 		</div>
 	</div>
 </div>
@@ -47,11 +47,15 @@
             var opts = {
                 subscribeKey: "{{ settings.PUBNUB_SUBSCRIBE_KEY }}",
                 publishKey: "{{ settings.PUBNUB_PUBLISH_KEY }}",
+                channel: "{{ settings.PUBNUB_CHANNEL }}",
                 username: "{{ user.username }}",
-                channel: "{{ settings.PUBNUB_CHANNEL }}"
+                latitude: 47.450380,
+                longitude: 22.500000
             };
 
             Messenger.init(opts);
         });
     </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key={{ settings.GOOGLE_API_KEY }}"></script>
 {% endblock extrascripts %}
