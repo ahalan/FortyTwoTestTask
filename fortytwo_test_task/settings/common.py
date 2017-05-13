@@ -57,8 +57,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'httplog.middleware.HttpRequestLoggerMiddleware',
-    # 'profile.middleware.GeolocationMiddleware',
+    'apps.httplog.middleware.HttpRequestLoggerMiddleware',
+    'apps.profile.middleware.GeolocationMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
