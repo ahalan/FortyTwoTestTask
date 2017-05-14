@@ -13,7 +13,7 @@ var Messenger = {
         var self = this;
 
         self.markers = [];
-        self.isUserTyping = false;
+        self.is_user_typing = false;
         self.is_first_init = true;
         self.channel = opts.channel;
         self.uuid = opts.username;
@@ -42,7 +42,7 @@ var Messenger = {
 
     addEvents: function (self) {
         self.elements.messageInput.on('keyup', function (e) {
-            if (self.elements.messageInput.val() !== '' && !self.isUserTyping) {
+            if (self.elements.messageInput.val() !== '' && !self.is_user_typing) {
                 self.setUserState(self, true);
             }
             if ((e.keyCode || e.charCode) === 13) {
@@ -170,10 +170,10 @@ var Messenger = {
     },
 
     setUserState: function (self, isTyping) {
-        self.isUserTyping = isTyping;
+        self.is_user_typing = isTyping;
         self.pubnub.setState({
             state: {
-                isTyping: self.isUserTyping,
+                isTyping: self.is_user_typing,
                 latlng: [self.lat, self.lng]
             },
             channels: [self.channel]
@@ -247,7 +247,7 @@ var Messenger = {
         var markers = self.getMarkerByUuid(self, uuid);
 
         // Add marker on map and to markers list
-        if (markers == 0) {
+        if (markers.length === 0) {
             var marker = new google.maps.Marker({
                 position: new google.maps.LatLng(lat, lng),
                 map: self.map,
@@ -262,7 +262,7 @@ var Messenger = {
         var markers = self.getMarkerByUuid(self, uuid);
 
         // Remove marker from map and markers list
-        if (markers !== 0) {
+        if (markers.length !== 0) {
             markers[0].setMap(null);
             self.markers = self.markers.filter(function (el) {
                 return el.uuid !== uuid;

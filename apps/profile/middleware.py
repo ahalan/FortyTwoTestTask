@@ -18,7 +18,6 @@ class GeolocationMiddleware(object):
             try:
                 latlng = GeoIP().coords(client_ip)
             except Exception as e:
-                print e
                 latlng = None
 
             request.user.lng, request.user.lat = latlng or (None, None)
