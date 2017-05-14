@@ -17,7 +17,7 @@ class GeolocationMiddleware(object):
 
             try:
                 latlng = GeoIP().coords(client_ip)
-            except Exception as e:
+            except:
                 latlng = None
 
             request.user.lng, request.user.lat = latlng or (None, None)
