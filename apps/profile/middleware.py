@@ -20,14 +20,13 @@ class GeolocationMiddleware(object):
                 client_ip = request.META.get('REMOTE_ADDR')
 
             try:
-                latlng = GeoIP().coords(client_ip)
+                latlng = GeoIP(
+                    path=settings.GEOIP_PATH,
+                    city=settings.GEOIP_CITY,
+                    country=settings.GEOIP_COUNTRY
+                ).coords(client_ip)
             except Exception as e:
                 print "Error: %s" % e
-                print "File: {}; Exists - {}; Permissions: {};".format(
-                    settings.GEOIP_CITY,
-                    os.path.isfile(settings.GEOIP_CITY),
-                    oct(stat.S_IMODE(os.stat(settings.GEOIP_CITY).st_mode))
-                )
                 latlng = None
 
             request.user.lng, request.user.lat = latlng or (None, None)
