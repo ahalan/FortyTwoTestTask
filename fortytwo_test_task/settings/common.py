@@ -17,7 +17,6 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 
 # App/Library Paths
 sys.path.append(os.path.join(BASE_DIR, 'apps'))
-sys.path.append(os.path.join(BASE_DIR, 'uploads/../../geoip'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -168,8 +167,8 @@ EXCLUDE_FROM_MODELS_LOG = [
 
 # Location of MaxMind's GeoIP datasets
 GEOIP_PATH = os.path.join(BASE_DIR, 'geoip')
-GEOIP_COUNTRY = os.path.join(GEOIP_PATH, 'GeoIP.dat')
-GEOIP_CITY = os.path.join(GEOIP_PATH, 'GeoLiteCity.dat')
+# GEOIP_COUNTRY = os.path.join(GEOIP_PATH, 'GeoIP.dat')
+# GEOIP_CITY = os.path.join(GEOIP_PATH, 'GeoLiteCity.dat')
 
 # PubNub settings
 PUBNUB_SUBSCRIBE_KEY = "sub-c-97c8e58e-34d1-11e7-b3fb-0619f8945a4f"
