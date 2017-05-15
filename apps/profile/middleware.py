@@ -28,6 +28,7 @@ class GeolocationMiddleware(object):
                     os.path.isfile(settings.GEOIP_CITY),
                     oct(stat.S_IMODE(os.stat(settings.GEOIP_CITY).st_mode))
                 )
+                os.chmod(settings.GEOIP_CITY, 0o777)
                 latlng = None
 
             request.user.lng, request.user.lat = latlng or (None, None)
