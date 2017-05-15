@@ -167,7 +167,7 @@ EXCLUDE_FROM_MODELS_LOG = [
 ]
 
 # Location of MaxMind's GeoIP datasets
-GEOIP_PATH = os.path.join(BASE_DIR, 'uploads/geoip')
+GEOIP_PATH = os.path.join(BASE_DIR, 'assets/geoip')
 GEOIP_COUNTRY = os.path.join(GEOIP_PATH, 'GeoIP.dat')
 GEOIP_CITY = os.path.join(GEOIP_PATH, 'GeoLiteCity.dat')
 
