@@ -168,8 +168,8 @@ EXCLUDE_FROM_MODELS_LOG = [
 
 # Location of MaxMind's GeoIP datasets
 GEOIP_PATH = os.path.join(BASE_DIR, 'uploads/geoip')
-GEOIP_COUNTRY = os.path.join(GEOIP_PATH, 'GeoIP')
-GEOIP_CITY = os.path.join(GEOIP_PATH, 'GeoLiteCity')
+GEOIP_COUNTRY = os.path.join(GEOIP_PATH, 'GeoIP.dat')
+GEOIP_CITY = os.path.join(GEOIP_PATH, 'GeoLiteCity.dat')
 
 # PubNub settings
 PUBNUB_SUBSCRIBE_KEY = "sub-c-97c8e58e-34d1-11e7-b3fb-0619f8945a4f"
