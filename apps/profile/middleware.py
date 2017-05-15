@@ -1,8 +1,5 @@
 from __future__ import unicode_literals
 
-import os
-import stat
-
 from django.conf import settings
 from django.contrib.gis.geoip import GeoIP
 
