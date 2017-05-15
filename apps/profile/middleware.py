@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
-from django.conf import settings
+import os
+
 from django.contrib.gis.geoip import GeoIP
 
 
@@ -17,11 +18,13 @@ class GeolocationMiddleware(object):
                 client_ip = request.META.get('REMOTE_ADDR')
 
             try:
-                latlng = GeoIP(
-                    path=settings.GEOIP_PATH,
-                    city=settings.GEOIP_CITY,
-                    country=settings.GEOIP_COUNTRY
-                ).coords(client_ip)
+                g = GeoIP()
+                print "City: ", g._city, g._city_file,\
+                    os.path.isfile(g._city_file)
+                print "Country: ", g._country, g._country_file, \
+                    os.path.isfile(g._country_file)
+
+                latlng = g.coords(client_ip)
             except Exception as e:
                 print "Error: %s" % e
                 latlng = None
