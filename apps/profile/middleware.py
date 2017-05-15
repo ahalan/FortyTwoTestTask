@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+import os
 from django.contrib.gis.geoip import GeoIP
 
 
@@ -19,6 +20,7 @@ class GeolocationMiddleware(object):
                 latlng = GeoIP().coords(client_ip)
             except Exception as e:
                 print e
+                print os.listdir("uploads/geoip")
                 latlng = None
 
             request.user.lng, request.user.lat = latlng or (None, None)
