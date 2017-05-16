@@ -2,3 +2,4 @@ Django==1.6.7
 42cc-pystyle
 south
 Pillow==4.0.0
+django-ipware==1.1.6
