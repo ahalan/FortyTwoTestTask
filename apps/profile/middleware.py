@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.contrib.gis.geoip import GeoIP
 from ipware.ip import get_ip
 
+
 class GeolocationMiddleware(object):
     """ Setting coordinates from request ip for authorized user """
 
